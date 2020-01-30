@@ -1,0 +1,54 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int solution(string dirs) {
+    bool visit[11][11][4]={false,}; // visit[y][x][0~4] => 0~4순으로 Up, Left, Right ,Down 방문표기
+
+    pair<int,int> idx=make_pair(5,5); //현 위치 값 , y값과 x값 저장
+    int answer = 0;
+
+    for(int i=0;i<dirs.size();i++) {
+        int ip,tip; //ip는 이동 할 곳 위치 기준 방향 방문표기, tip는 현 위치 기준 방향 방문표기
+        pair<int,int> tidx=idx; //현 위치 저장
+
+        switch(dirs[i]) {
+            case 'U' : 
+                if(idx.first>0) {
+                    idx.first--;
+                    tip=0;
+                    ip=3;
+                }
+                break;
+            case 'L' : 
+                if(idx.second>0) {
+                    idx.second--;
+                    tip=1;
+                    ip=2;
+                }
+                break;
+            case 'D' : 
+                if(idx.first<10) {
+                    idx.first++;
+                    tip=3;
+                    ip=0;
+                }
+                break;
+            case 'R' :
+                if(idx.second<10) {
+                    idx.second++;
+                    tip=2;
+                    ip=1;
+                }
+                break;
+        }
+        if(!visit[idx.second][idx.first][ip] && !visit[tidx.second][tidx.first][tip]) {
+            answer++;
+            visit[idx.second][idx.first][ip]=true;
+            visit[tidx.second][tidx.first][tip]=true;
+        }
+
+    }
+    return answer;
+}
