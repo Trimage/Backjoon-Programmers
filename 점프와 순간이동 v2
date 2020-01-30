@@ -1,0 +1,22 @@
+/* 
+기존 DP방법에서 다시 해결한 방법
+탐욕법으로 해결
+
+n이 1이 아닐 때 까지 2로 나누고,
+2로 나눈 나머지가 1인 경우 answer에 1추가
+
+
+*/
+
+#include <iostream>
+using namespace std;
+
+int solution(int n)
+{
+    int answer=1;
+    while(n!=1) {
+        if(n%2==1) answer++;
+        n/=2;
+    }
+    return answer;
+}
