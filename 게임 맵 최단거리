@@ -1,0 +1,37 @@
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int solution(vector<vector<int> > maps)
+{
+    int maxy=maps.size() , maxx=maps[0].size();
+
+    int dx[]={0,0,1,-1};
+    int dy[]={1,-1,0,0};
+
+    vector<vector<bool>> visit(maxy,vector<bool>(maxx,false));
+    vector<vector<int>> cnt(maxy,vector<int>(maxx,1));
+
+    queue<pair<int,int>> Q;
+    Q.push(make_pair(0,0));
+    visit[0][0]=true;
+
+    while(!Q.empty()) {
+        int y=Q.front().first , x=Q.front().second;
+        Q.pop();
+
+        for(int i=0;i<4;i++) {
+            int ay=y+dy[i];
+            int ax=x+dx[i];
+
+            if(ay>=0 && ay<maxy && ax>=0 && ax<maxx && maps[ay][ax]==1 && !visit[ay][ax]) {
+                visit[ay][ax]=true;
+                cnt[ay][ax] = cnt[y][x] + 1;
+                if(ay==maxy-1 && ax==maxx-1) return cnt[ay][ax];
+                Q.push(make_pair(ay,ax));
+            }
+        }
+    }
+    return -1;
+}
