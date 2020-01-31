@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+bool str_cmp (string a, string b) { //1글자만 다른지 체크
+    int str_size=a.size();
+    int cnt=0;
+    for(int i=0;i<str_size;i++) {
+        if(a[i]!=b[i]) cnt++;
+    }
+    if(cnt==1) return true;
+    return false;
+}
+
+int solution(string begin, string target, vector<string> words) {
+    vector<bool> visit(words.size(),false);
+    int wsize = words.size();
+    
+    queue<pair<string,int>> Q;
+    Q.push(make_pair(begin,0));
+    while(!Q.empty()) {
+        string current=Q.front().first;
+        int cnt=Q.front().second;
+        Q.pop();
+        
+        if(current==target) return cnt;
+        
+        for(int i=0;i<wsize;i++) {
+            if(str_cmp(current,words[i]) && !visit[i]) {
+                visit[i]=true;
+                Q.push(make_pair(words[i],cnt+1));
+            }
+        }
+    }
+    
+    return 0;
+}
