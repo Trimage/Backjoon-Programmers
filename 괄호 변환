@@ -1,0 +1,42 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+string solution(string p) {
+    string answer;
+    string U="",V="";
+    int balance=0;
+
+    if(p.size()==0) return p; //규칙 1
+
+    for(int i=0;i<p.size();i++) { //규칙 2
+        if(p[i]=='(') {
+            U+=p[i];
+            balance++;
+        }
+        else if(p[i]==')') {
+            balance--;
+            U+=p[i];
+        }
+        if(balance==0) {
+            for(int j=i+1;j<p.size();j++) V+=p[j];
+            break;
+        }
+    }
+
+    if(U[0]=='(') answer=U+solution(V); //규칙 3
+    else { //규칙 4
+        answer="("; //규칙 4-1
+        answer+=solution(V); //규칙 4-2
+        answer+=")"; //규칙 4-3
+        U.erase(0,1); // 규칙 4-4
+        U.erase(U.size()-1,1);
+        for(int i=0;i<U.size();i++) {
+            if(U[i]=='(') answer+=")";
+            else answer+="(";
+        }
+    }
+
+    return answer; //규칙 4-5
+}
