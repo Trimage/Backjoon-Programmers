@@ -1,3 +1,14 @@
+/*
+
+BFS 로 해결
+
+1) 문자열 중 글자가 1개만 다르면서 한번도 바꾸지 않은 문자열인 경우 queue에 문자열과 기존cnt값+1을 한 값을 삽입
+2) queue.front() 의 문자열이 target과 같은 경우 해당 cnt값을 반환
+2-1) 아닌 경우 0을 반환
+
+*/
+
+
 #include <string>
 #include <vector>
 #include <queue>
