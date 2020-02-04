@@ -1,3 +1,12 @@
+/*
+
+1) vector A, vector B를 오름차순으로 정렬
+2) int idx 선언 및 0으로 초기화 => idx는 A와 B의 원소값 비교시 빠른 연산처리를 위함
+3) A의 원소값을 0부터 끝까지 B의 원소값 idx부터 끝까지와 비교한다
+    만약, A[i] < B[j] 인 경우 answer값 1추가, idx=j+1
+    
+*/
+
 #include <string>
 #include <vector>
 #include <algorithm>
