@@ -1,0 +1,47 @@
+#include <string>
+#include <vector>
+#include <cmath>
+
+using namespace std;
+
+int solution(string dartResult) {
+    vector<int> arr(4);
+    int cnt=1;
+    string str="";
+    for(int i=0;i<dartResult.size();i++) {
+        if(dartResult[i] >='0' && dartResult[i] <='9') str+=dartResult[i];
+        else {
+            switch(dartResult[i]) {
+                case 'D' :
+                    arr[cnt] = stoi(str);
+                    str="";
+                    arr[cnt]=pow(arr[cnt],2);
+                    cnt++;
+                    break;
+                case 'T' :
+                    arr[cnt] = stoi(str);
+                    str="";
+                    arr[cnt]=pow(arr[cnt],3);
+                    cnt++;
+                    break;
+                case '*' :
+                    cnt--;
+                    arr[cnt]*=2;
+                    if(cnt!=0) arr[cnt-1]*=2;
+                    cnt++;
+                    break;
+                case '#' :
+                    arr[cnt-1]*=-1;
+                    break;
+                default : 
+                    arr[cnt] = stoi(str);
+                    str="";
+                    cnt++;
+                    break;
+            }
+        }
+    }
+    int answer = 0;
+    for(int i=1;i<4;i++) answer+=arr[i];
+    return answer;
+}
