@@ -1,3 +1,14 @@
+/* 
+
+nums의 원소 종류 중에서도 nums.size() / 2 의 값을 초과하지 않아야함.
+
+1) vector<int> nums의 원소 종류만큼 set에 삽입
+2) set의 사이즈(원소 종류 개수) < nums.size() / 2  이면 nums.size()/2 를 반환
+2-1) 아닌 경우 set의 사이즈를 반환
+
+*/
+
+
 #include <vector>
 #include <set>
 
