@@ -1,53 +1,36 @@
 #include <string>
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 
-int solution(int m, int n, vector<string> board) {
-    vector<vector<bool>> check(m, vector<bool>(n, false));
+bool cmp(pair<string,int> a, pair<string,int> b) {
+    if(a.second < b.second) return true;
+    return false;
+}
 
+int solution(int cacheSize, vector<string> cities) {
+    if(cacheSize==0) return cities.size() * 5;
+
+    vector<pair<string,int>> arr(cacheSize,make_pair(" ",-1));
     int answer = 0;
 
-    while (1) {
-        for (int i = 1;i < m - 1;i++) {
-            for (int j = 1;j < n - 1;j++) {
-                if (board[i][j] != ' ') {
-                    if (board[i][j] == board[i - 1][j - 1] && board[i][j] == board[i - 1][j] && board[i][j] == board[i][j - 1]) check[i][j] = check[i - 1][j - 1] = check[i - 1][j] = check[i][j - 1] = true;
-                    if (board[i][j] == board[i - 1][j + 1] && board[i][j] == board[i - 1][j] && board[i][j] == board[i][j + 1]) check[i][j] = check[i - 1][j + 1] = check[i - 1][j] = check[i][j + 1] = true;
-                    if (board[i][j] == board[i + 1][j - 1] && board[i][j] == board[i][j - 1] && board[i][j] == board[i + 1][j]) check[i][j] = check[i + 1][j - 1] = check[i][j - 1] = check[i + 1][j] = true;
-                    if (board[i][j] == board[i + 1][j + 1] && board[i][j] == board[i][j + 1] && board[i][j] == board[i + 1][j]) check[i][j] = check[i + 1][j + 1] = check[i][j + 1] = check[i + 1][j] = true;
-                }
+    for(int i=0;i<cities.size();i++) {
+        int j;
+        for(j=0;j<cities[i].size();j++) if(cities[i][j]>= 'a' && cities[i][j]<='z') cities[i][j]-=32;
+
+        for(j=0;j<cacheSize;j++) {
+            if(arr[j].first==cities[i]) {
+                arr[j].second=i;
+                answer++;
+                break;
             }
         }
-
-        int cnt = 0;
-        for (int i = 0;i < m;i++) {
-            for (int j = 0;j < n;j++) {
-                if (check[i][j]) cnt++;
-            }
+        if(j==cacheSize) {
+            answer+=5;
+            sort(arr.begin(),arr.end(),cmp);
+            arr[0]=make_pair(cities[i],i);
         }
-
-        if (cnt == 0)break;
-        answer += cnt;
-
-        for (int i = m - 1;i >= 0;i--) {
-            for (int j = 0;j < n;j++) {
-                if (check[i][j] || board[i][j]==' ') {
-                    board[i][j] = ' ';
-                    for (int k = i - 1;k >= 0;k--) {
-                        if (!check[k][j] && board[k][j] != ' ') {
-                            board[i][j] = board[k][j];
-                            board[k][j] = ' ';
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        for (int i = 0;i < m;i++)
-            fill(check[i].begin(), check[i].end(), false);
-
     }
 
     return answer;
