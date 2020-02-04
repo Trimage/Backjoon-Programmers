@@ -1,0 +1,61 @@
+#include <string>
+#include <map>
+#include <iostream>
+
+using namespace std;
+
+int solution(string str1, string str2) {
+    map<string,int> arr1, arr2; //집합 A, B
+    map<string,int> uni,inter; // 집합 A, B에 대한 합집합, 교집합
+
+    for(int i=0;i<str1.size();i++) if(str1[i]>= 'a' && str1[i] <= 'z') str1[i]-=32;
+    for(int i=0;i<str2.size();i++) if(str2[i]>= 'a' && str2[i] <= 'z') str2[i]-=32;
+
+    for(int i=0;i<str1.size()-1;i++) {
+        if(str1[i] >= 'A' && str1[i] <= 'Z' && str1[i+1] >= 'A' && str1[i+1] <= 'Z') {
+            string str="";
+            str += str1[i];
+            str += str1[i + 1];
+            if(arr1.find(str)!=arr1.end()) arr1[str]++;
+            else arr1.insert(make_pair(str,1));
+        }
+    }
+
+    for(int i=0;i<str2.size()-1;i++) {
+        if(str2[i] >= 'A' && str2[i] <= 'Z' && str2[i+1] >= 'A' && str2[i+1] <= 'Z') {
+            string str="";
+            str += str2[i];
+            str += str2[i + 1];
+            if(arr2.find(str)!=arr2.end()) arr2[str]++;
+            else arr2.insert(make_pair(str,1));
+        }
+    }
+    if(arr1.size() ==0 && arr2.size()==0) return 1*65536;
+
+    map<string,int> :: iterator iter;
+    for(iter =arr1.begin();iter!=arr1.end();iter++) uni.insert(*iter);
+    for(iter =arr2.begin();iter!=arr2.end();iter++) {
+        auto iter2 = uni.find(iter->first);
+        if(iter2 == uni.end()) {
+            uni.insert(*iter);
+            continue;
+        }
+        if(iter2->second < iter->second) iter2->second = iter->second;
+    }
+
+    for(iter=arr1.begin();iter!=arr1.end();iter++) {
+        auto iter2 = arr2.find(iter->first);
+        if(iter2 == arr2.end()) continue;
+        if(iter->second < iter2->second) inter.insert(*iter);
+        else inter.insert(*iter2);
+    }
+
+    double inter_size=0, uni_size=0;
+    for(iter=uni.begin();iter!=uni.end();iter++) uni_size+=iter->second;
+    for(iter=inter.begin();iter!=inter.end();iter++) inter_size+=iter->second;
+
+    cout << inter_size << ' ' << uni_size;
+
+    int answer = inter_size / uni_size * 65536;
+    return answer;
+}
