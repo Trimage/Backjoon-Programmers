@@ -15,7 +15,6 @@ int solve(int num) {
 }
 
 
-
 int solution(int n)
 {
     DP.resize(n+1,0);
