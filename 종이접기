@@ -1,0 +1,42 @@
+/*
+상상이 안되면 실제로 해보자
+종이로 접어가면서 규칙성을 찾은 문제
+
+안쪽으로 굽어지면 0, 바깥쪽으로 굽어지면 1
+
+종이를 1번 접으면 0
+종이를 2번 접으면 0, 0, 1
+종이를 3번 접으면 0, 0, 1, 0, 0, 1, 1
+종이를 4번 접으면 0, 0, 1, 0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1
+...
+
+해결 방법은 아래와 같음
+
+우선 1번 접은 것에 대해 0을 삽입 ==> arr[1]={0};
+1) arr[n] = arr[n-1] + {0}
+2) arr[n]에 arr[n-1]의 원소 뒤에서부터 삽입하되 원소값이 1이면 0삽입
+2-1) arr[n-1]의 원소 뒤에서 삽입하되 원소값이 0이면 1삽입
+3) n값이 1보다 큰 경우 위 과정을  2부터 n 까지 반복
+*/
+
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(int n) {
+    vector<vector<int>> arr(n+1); //접은 회수를 넣어두기 위한 동적배열
+    arr[1].push_back(0);
+
+    for(int i=2;i<=n;i++) {
+        arr[i].assign(arr[i-1].begin(),arr[i-1].end());
+        arr[i].push_back(0);
+
+        for(int j=arr[i-1].size()-1;j>=0;j--) {
+            if(arr[i-1][j]==1) arr[i].push_back(0);
+            else arr[i].push_back(1);
+        }
+    }
+
+    return arr[n];
+}
