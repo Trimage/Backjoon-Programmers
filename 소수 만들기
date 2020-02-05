@@ -1,0 +1,33 @@
+/*
+
+1) vector<int> nums의 값을 3가지의 경우로 각각 더한다
+2) 1번에서 나온 값을 "2 ~ 1에서나온 값" 까지 나눴을 경우 0인 경우를 counting 한다
+2-1) 2번에서 counting 한 결과값이 2를 경우 소수가 아니므로 1번으로 다시 가서 비교한다
+2-2) 2번문을 다 마쳤는데도 counting 한 결과가 1인 경우 answer++ 한다.
+
+*/
+
+#include <vector>
+
+using namespace std;
+
+
+int solution(vector<int> nums) {
+    int answer = 0;
+
+    for(int i=0;i<nums.size()-2;i++) {
+        for(int j=i+1;j<nums.size()-1;j++) {
+            for(int k=j+1;k<nums.size();k++) {
+                int num = nums[i]+nums[j]+nums[k];
+                int cnt=0;
+                for(int cc=2;cc<=num3;cc++) {
+                    if(num%cc==0) cnt++;
+                    if(cnt==2) break;
+                }
+                if(cnt==1) answer++;
+            }
+        }
+    }
+
+    return answer;
+}
