@@ -1,22 +1,35 @@
-#include <vector>
+/*
+첫번째 시도 DP
+DP문제인 줄 알고 DP로 해결하려했으나 효율성(시간초과 및 메모리초과)부분에서 실패함
 
+top-down형식으로 해결 시도
+P1 = 1로 설정
+1) Pn = P(n/2)  (n%2==0)
+   Pn = P(n/2) + 1  (n%2==1)
+   
+*/
+
+#include <vector>
 using namespace std;
 
 vector<int> DP;
 
-int solve(int num) {
-    if (num==1) return DP[num]=num;
-    if(DP[num]==0) {
-        DP[num]=solve(num/2);
-        if(num%2==1) DP[num]++;
+int solve(int n)
+{
+    if(DP[n]==0) {
+        DP[n]=solve(n/2);
+        if(n%2==1) DP[n]++;
     }
-
-    return DP[num];
+    return DP[n];
 }
 
 
 int solution(int n)
 {
     DP.resize(n+1,0);
-    return solve(n);
-}
+    DP[1]=1;
+    
+    solve(n);
+    return DP[n];
+    
+ }
