@@ -1,0 +1,36 @@
+#include <string>
+#include <vector>
+#include <iostream>
+#include <set>
+
+using namespace std;
+
+vector<int> solution(int n, vector<string> words) {
+    vector<int> answer;
+    set<string> call_word;
+    int cnt=1; // cnt = 원활한 끝말잇기 진행 횟수
+
+    call_word.insert(words[0]);
+
+    for(int i=1;i<words.size();i++) {   // words 길이 만큼 반복
+        if(words[i-1][words[i-1].length()-1] != words[i][0]) break;
+        //끝말잇기 제대로 되는지 확인
+
+        if(call_word.find(words[i]) != call_word.end()) break;
+        //중복 단어 검사
+
+        call_word.insert(words[i]);
+        cnt++;
+    }
+
+    if(cnt==words.size()) {
+        answer.push_back(0);
+        answer.push_back(0);
+    }
+    else {    
+        answer.push_back(cnt%n+1);
+        answer.push_back(cnt/n+1);
+    }
+
+    return answer;
+}
