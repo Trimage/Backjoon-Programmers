@@ -1,11 +1,13 @@
 /* 
-기존 DP방법에서 다시 해결한 방법
-탐욕법으로 해결
+두번째 시도 탐욕법
+첫번째 DP로 시도하였을 때 하나하나 DP를 호출하면서 시간초과 및 메모리초과가 발생한다고 판단함
+탐욕법으로 해결 시도한 결과 성공
 
-n이 1이 아닐 때 까지 2로 나누고,
-2로 나눈 나머지가 1인 경우 answer에 1추가
+answer는 1로 설정 (최소값이 1임)
 
-
+1) n%2==1 인경우 answer++
+2) n/2;
+3) n이 1이 아닐때 까지 1,2번 반복
 */
 
 #include <iostream>
@@ -14,9 +16,11 @@ using namespace std;
 int solution(int n)
 {
     int answer=1;
+    
     while(n!=1) {
         if(n%2==1) answer++;
         n/=2;
     }
+
     return answer;
 }
