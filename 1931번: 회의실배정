@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void read(vector<pair<int,int>>& time_table) {	//회의실 사용표 작성
+	
+	int num;
+	cin >> num;
+
+	pair<int, int> data;		// 회의 시작시간과 끝나는 시간 저장 변수
+	for (int i = 0;i < num;i++) {
+		cin >> data.first >> data.second;
+		time_table.push_back(data);
+	}
+}
+
+
+int solve(const vector<pair<int,int>>& time_table) {	//회의 진행 최대 개수 계산
+	
+	int answer = 1;							//회의는 최소 한번 이상 진행
+	int end_time=time_table[0].second;		//끝나는 시간 저장
+
+	for (int i = 1; i<time_table.size(); i++) {
+		if (end_time <= time_table[i].first) {
+			answer++;
+			end_time = time_table[i].second;
+		}
+	}
+	return answer;
+}
+
+bool cmp(const pair<int, int> a, const pair<int, int> b) {
+	if (a.second == b.second) return a.first < b.first;
+	return a.second < b.second;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    cout.tie(NULL);
+    
+	vector<pair<int, int>> time_table;
+
+	read(time_table);
+    
+    sort(time_table.begin(), time_table.end(),cmp);
+
+	cout << solve(time_table);
+	return 0;
+}
