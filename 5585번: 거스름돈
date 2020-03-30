@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int read() {		//거스름돈 계산
+	int price;
+	cin >> price;
+
+	return 1000 - price;
+}
+
+int solve(const vector<int>& coin_list, int money) { //잔돈 동전 개수 계산
+	
+	int answer = 0;
+	
+	for (int i = 0;i < coin_list.size();i++) {
+		answer += money / coin_list[i];
+		money %= coin_list[i];
+
+		if (money == 0) break;
+	}
+
+	return answer;
+}
+
+int main() {
+	vector<int> coin_list = { 500,100,50,10,5,1 };
+	
+	int money = read();
+	
+	cout << solve(coin_list, money);
+
+	return 0;
+
+}
