@@ -1,0 +1,33 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+void read(string& str1, string& str2) {			//문자열 입력
+	cin >> str1 >> str2;
+}
+
+int solve(const string& str1, const string& str2) {			//차이 최소값 구하기
+	int gap = str2.size() - str1.size();
+	int answer = str2.size();
+	int cnt = 0;
+
+	for (int i = 0;i <= gap;i++) {
+		for (int j = 0;j < str1.size();j++) {
+			if (str1[j] != str2[j + i]) cnt++;
+		}
+		answer = answer > cnt ? cnt : answer;
+		cnt = 0;
+	}
+
+	return answer;
+}
+
+int main() {
+	string str1, str2;
+	
+	read(str1, str2);
+	cout << solve(str1, str2);
+
+	return 0;
+}
