@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class human {
+private : 
+	int tall;
+	int weight;
+	int rank;
+public :
+	human(int tal = 0, int wei = 0) : tall(tal), weight(wei), rank(1) {}
+
+	void insert() {			//정보 삽입
+		cin >> tall >> weight;
+	}
+
+	void rankcmp(const human& man) {		//랭킹 업데이트
+		if (man.tall > tall && man.weight > weight) rank++;
+	}
+
+	void ranking() const{	//랭킹 출력
+		cout << rank << ' ';
+	}
+};
+
+void read(vector<human>& arr) {
+	int num;
+	cin >> num;
+
+	for (int i = 0;i < num;i++) {
+		human man;
+		man.insert();
+		arr.push_back(man);
+	}
+}
+
+void update(vector<human>& arr) {
+
+	for (int i = 0;i < arr.size();i++) {
+		for (int j = 0;j < arr.size();j++) {
+			arr[i].rankcmp(arr[j]);
+		}
+	}
+}
+
+void result(const vector<human>& arr) {
+
+	for (int i = 0;i < arr.size();i++) {
+		arr[i].ranking();
+	}
+}
+
+int main() {
+	vector<human> arr;		// 인원 저장 배열
+
+	read(arr);		//데이터 읽기
+	update(arr);	//랭킹 확인
+	result(arr);	//결과 출력
+	
+	return 0;
+}
