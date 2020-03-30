@@ -1,0 +1,28 @@
+#include <iostream>
+
+using namespace std;
+
+int man, girl, intern;
+
+void read() {
+	cin >> girl >> man >> intern;
+
+	while (intern != 0) {
+		if (man * 2 < girl) girl--;
+		else man--;
+
+		intern--;
+	}
+}
+
+int solve() {
+	int answer = girl / 2 < man ? girl / 2 : man;
+	return answer;
+}
+
+int main() {
+	read();
+	cout << solve();
+	
+	return 0;
+}
