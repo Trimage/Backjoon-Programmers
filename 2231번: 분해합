@@ -1,0 +1,27 @@
+#include <iostream>
+
+using namespace std;
+
+int solve(int num) {
+	for (int i = 1;i < num; i++) {
+		int sum = i;
+		int tmp = i;
+
+		for (int tmp = i; tmp != 0; tmp /= 10) {	//자릿수 더하기
+			sum += tmp % 10;
+		}
+
+		if (sum == num) return i;
+	}
+
+	return 0;
+}
+
+int main() {
+	int num;
+	cin >> num;
+
+	cout << solve(num);
+	
+	return 0;
+}
