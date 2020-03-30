@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+void read(vector<int>& rope) {	//로프 별 최대중량 vector에 저장
+	int num;	//로프 개수
+	cin >> num;
+	
+	rope.resize(num);
+
+	for (int i = 0;i < num;i++) {
+		cin >> rope[i];
+	}
+}
+
+int solve(const vector<int>& rope) {	//최대 중량 계산
+	int answer = 0;
+	for (int i = 0;i < rope.size();i++) {
+		if (answer < rope[i] * (i + 1)) answer = rope[i] * (i + 1);
+	}
+    
+	return answer;
+}
+
+int main() {
+	ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    vector<int> rope;
+
+	read(rope);
+	sort(rope.begin(), rope.end(), greater<int>());	//로프 vector 내림차순 정렬
+	cout << solve(rope);
+
+	return 0;
+
+}
