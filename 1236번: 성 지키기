@@ -1,0 +1,42 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main() {
+
+	int row, column;
+	cin >> row >> column;
+
+	char data;
+	vector<vector<char>> arr(row, vector<char>(column));
+	vector<vector<char>> check(row, vector<char>(column,false));
+
+	for (int i = 0;i < row;i++) {
+		for (int j = 0;j < column;j++) {
+			cin >> data;
+			if (data == 'X') {
+				for (int k = 0;k < row;k++) {
+					check[k][j] = true;
+					check[j][k] = true;
+				}
+			}
+		}
+
+	}
+	int cnt = 0;
+
+	for (int i = 0;i < row;i++) {
+		for (int j = i;j < column;j++) {
+			if (!arr[i][j] || !arr[j][i]) {
+				cnt++;
+				break;
+			}
+		}
+	}
+	
+	cout << cnt;
+
+
+	return 0;
+}
