@@ -1,0 +1,38 @@
+#include <iostream>
+
+using namespace std;
+
+
+int solve(int num) {        // N번째 영화의 제목에 들어갈 숫자 출력
+    
+	int answer = 666;		// 1번째- 666 , 2번째-1666 ...
+	int cnt = 1;            // cnt번째... 
+
+	while (answer) {
+		if (cnt == num) break;
+		answer++;
+
+		int check = 0;
+
+		int tmp = answer;
+
+		while (tmp) {
+			if (tmp % 10 == 6) check++;
+			else if (check < 3) check = 0;
+			tmp /= 10;
+		}
+
+		if (check >= 3) cnt++;
+	}
+
+	return answer;
+}
+
+int main() {
+	int num;
+	cin >> num;
+
+	cout << solve(num);
+	
+	return 0;
+}
