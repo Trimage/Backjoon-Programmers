@@ -1,0 +1,30 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int solve(const string& str, const string& sub) {
+	int answer = 0;
+	
+	int idx=0;
+
+	while (1) {
+		idx = str.find(sub, idx);
+		if (idx == -1) break;
+
+		answer++;
+		idx += sub.size();
+	}
+
+	return answer;
+}
+
+int main() {
+	string str, sub;
+	getline(cin, str);
+	getline(cin, sub);
+	
+	cout << solve(str,sub);
+
+	return 0;	
+}
