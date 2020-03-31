@@ -1,0 +1,35 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+void read(vector<vector<char>>& arr) {		//체크판 상태 입력
+	for (int i = 0;i < 8;i++) {
+		for (int j = 0;j < 8;j++) {
+			cin >> arr[i][j];
+		}
+	}
+}
+
+int solve(const vector<vector<char>>& arr) {	// (0,0)이 하얀 칸 일 때, 하얀 칸 위에 있는 말의 개수를 세서 반환
+	int answer = 0;
+
+	for (int i = 0;i < 8;i++) {
+		for (int j = i % 2;j < 8;j += 2) {
+			if (arr[i][j] == 'F') answer++;
+		}
+	}
+
+	return answer;
+}
+
+int main() {
+	vector<vector<char>> arr(8, vector<char>(8)); // 8*8 체크판
+
+	read(arr);
+
+	cout << solve(arr);
+
+	return 0;
+}
