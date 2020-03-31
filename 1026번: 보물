@@ -1,0 +1,51 @@
+#include <iostream>
+#include <algorithm>
+#include <vector>
+
+using namespace std;
+
+void read(vector<int>& a_arr, vector<int>& b_arr) {		// 배열 A, 배열 B에 값 저장
+	int num;
+	cin >> num;
+
+	int data;
+
+	for (int i = 0;i < num;i++) {
+		cin >> data;
+		a_arr.push_back(data);
+	}
+
+	for (int i = 0;i < num;i++) {
+		cin >> data;
+		b_arr.push_back(data);
+	}
+}
+
+
+int solve(const vector<int>& a_arr, const vector<int>& b_arr) {			// 배열A와 배열B의 각 값을 곱한 총합의 최소값 반환
+
+	int size = a_arr.size();
+
+	int answer = 0;
+
+	for (int i = 0;i < size;i++) {
+		answer += a_arr[i] * b_arr[i];
+	}
+
+	return answer;
+}
+
+
+int main() {
+	vector<int> a_arr;
+	vector<int> b_arr;
+	
+	read(a_arr, b_arr);
+
+	sort(a_arr.begin(), a_arr.end());				//배열 A 오름차순으로 정렬
+	sort(b_arr.begin(), b_arr.end(), greater<>());	//배열 B 내림차순으로 정렬
+
+	cout << solve(a_arr, b_arr);
+
+	return 0;	
+}
