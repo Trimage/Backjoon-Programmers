@@ -1,0 +1,56 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void read(vector<int>& arr) {
+	int num;
+	cin >> num;
+
+	int data;
+
+	for (int i = 0;i < num;i++) {
+		cin >> data;
+		arr.push_back(data);
+	}
+}
+
+int left_view(const vector<int>& arr) {			//왼쪽에서 봤을 때 보이는 트로피 개수 반환
+	int size = arr.size();
+	int	sight = 0;		// 현재까지 본 것 중 높이가 가장 큰 트로피의 높이
+	int answer = 0;		// 보이는 트로피 개수
+
+	for (int i = 0;i < size;i++) {
+		if (sight < arr[i]) {
+			answer++;
+			sight = arr[i];
+		}
+	}
+	return answer;
+}
+
+int right_view(const vector<int>& arr) {			//오른쪽에서 봤을 때 보이는 트로피 개수 반환
+	int	sight = 0;		// 현재까지 본 것 중 높이가 가장 큰 트로피의 높이
+	int answer = 0;		// 보이는 트로피 개수
+
+	for (int i = arr.size()-1;i >=0;i--) {
+
+		if (sight < arr[i]) {
+			answer++;
+			sight = arr[i];
+		}
+	}
+	return answer;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+	vector<int> arr;
+
+	read(arr);
+	cout << left_view(arr) << endl << right_view(arr);
+
+	return 0;
+}
