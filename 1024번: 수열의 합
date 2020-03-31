@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+pair<int, int> solve(int N, int L) {		//N을 절반 나눈 수를 기준으로 숫자를 줄여가며 조건에 맞는 정수 리스트를 구함
+
+	int maxim = N / L + 1;
+	int cnt = 0;
+
+	while (maxim != 0) {
+		int sum = 0;
+
+		for (int i = maxim;i > 0;i--) {
+			sum += i;
+			cnt++;
+			if (sum > N) break;							// 정수리스트 값이 N을 초과하면 break
+			else if (sum == N && cnt >= L) break;		//조건에 맞는 정수리스트를 찾으면 break
+		}
+
+		if (sum == N) break;
+
+		cnt = 0;
+		maxim--;
+	}
+
+	if (cnt >= L && cnt <=100) return pair<int, int>(maxim, cnt);
+
+	else return pair<int, int>(-1, -1);
+}
+
+void output(const pair<int,int>& answer) {		//정답 출력
+	if (answer.first != -1) {
+		for (int i = answer.first - answer.second + 1;i <= answer.first;i++) {
+			cout << i << ' ';
+		}
+	}
+	else cout << -1;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+	vector<int> arr;
+
+	int N, L;
+	cin >> N >> L;
+
+	pair<int,int> answer = solve(N, L);		//pair 첫번째값은 정수리스트의 최대값, 두번째값은 정수리스트의 길이
+	output(answer);
+    
+	return 0;
+}
