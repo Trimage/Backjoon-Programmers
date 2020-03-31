@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+class keyword {
+private : 
+	string str;
+	
+public :
+	keyword() {
+		str = "";
+	}
+
+	keyword(string ss) : str(ss) {}
+	
+	void insert() {
+		cin >> str;
+	}
+
+	bool solve() {		//그룹 단어 체크 후 맞으면 true, 아니면 false 반환
+		vector<bool> check(26, false);
+
+		char data;
+
+		for (int i = 0;i < str.size();i++) {
+			if (!check[str[i] - 'a']) {
+				data = str[i];
+				check[str[i] - 'a'] = true;
+			}
+			else {
+				if (data == str[i]) continue;
+				else return false;
+			}
+		}
+
+		return true;
+	}
+
+};
+
+
+int main() {
+	int answer = 0;
+
+	int n;
+	cin >> n;
+	
+	for (int i = 0;i < n;i++) {
+		keyword word;
+		word.insert();
+		if (word.solve()) answer++;
+	}
+
+	cout << answer;
+	
+	return 0;
+}
