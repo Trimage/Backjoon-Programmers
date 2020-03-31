@@ -1,0 +1,25 @@
+#include <iostream>
+
+using namespace std;
+
+int solve(int bird) {		//남은 새가 0일 때 까지 게임을 진행
+	int answer = 0;
+	
+	for (int i = 1;bird != 0; i++) {
+		if (bird < i) i = 1;
+		
+		bird -= i;
+		answer++;
+	}
+
+	return answer;
+}
+
+int main() {
+	int bird;
+	cin >> bird;
+
+	cout << solve(bird);
+
+	return 0;
+} 
