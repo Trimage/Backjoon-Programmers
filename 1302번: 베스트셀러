@@ -1,0 +1,31 @@
+#include <map>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+string solve(int num) {
+    map<string, int> M;
+	string answer="";
+
+	for (int i = 0;i < num;i++) {
+		string str;
+		cin >> str;
+
+		M[str]++;
+
+		if (M[answer] < M[str]) answer = str;
+		if (M[answer] == M[str]) answer = answer > str ? str : answer;
+	}
+    
+	return answer;
+}
+
+int main() {
+	int num;
+	cin >> num;
+    
+    cout << solve(num);
+
+	return 0;
+}
