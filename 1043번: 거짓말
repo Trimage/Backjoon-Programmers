@@ -1,0 +1,100 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void true_list_init(vector<bool>& true_list) {		//진실을 아는 사람 리스트 초기값 적용
+	int true_num;			// 진실을 아는 사람의 수
+	cin >> true_num;
+
+	int true_man;		//진실을 아는 사람
+
+	for (int i = 0;i < true_num;i++) {
+		cin >> true_man;
+		true_list[true_man] = true;
+	}
+}
+
+void party_list_init(vector<vector<int>>& party_list, vector<vector<bool>>& party_list_visit, const int party_num) {	//파티리스트 별 명단 초기값 적용
+            //진실을 아는 사람 리스트 초기값 적용
+    
+	for (int i = 0;i < party_num;i++) {
+		int party_size;
+		cin >> party_size;
+
+		vector<int> party;
+
+		int participate;
+
+		for (int j = 0;j < party_size;j++) {
+			cin >> participate;
+			party.push_back(participate);
+		}
+
+		party_list.push_back(party);
+		party_list_visit.push_back(vector<bool>(party.size(), false));
+        //party_list_vist은 파티리스트 별 참여명단 체크용 벡터(명단 업데이트 및 정답구하기에 활용)
+	}
+}
+
+void party_list_update(vector<bool> true_list, const vector<vector<int>>& party_list, vector<vector<bool>> party_list_visit, vector<bool>& can_lie_party) {
+	//파티리스트 명단 내 진실 아는사람 업데이트
+
+	bool check = true;
+	while (check) {
+		check = false;
+
+		for (int i = 0;i < party_list.size();i++) {
+
+			for (int j = 0;j < party_list[i].size();j++) {
+
+				if (true_list[party_list[i][j]] && !party_list_visit[i][j]) {
+							//진실자가 포함되어있으면서 해당 파티 내 모든 인원을 검사하지않았을 경우, 파티명단 및 확인유무 변경 후 처음부터 재검색
+					check = true;
+					can_lie_party[i] = false;
+
+					for (int k = 0; k < party_list[i].size();k++) {
+						true_list[party_list[i][k]] = true;
+						party_list_visit[i][k] = true;
+					}
+
+				}
+
+			}
+		}
+	}
+}
+
+int answer_output(vector<bool> can_lie_party) {    //정답 출력
+	int answer = 0;
+
+	for (int i = 0;i < can_lie_party.size();i++) {
+		if (can_lie_party[i]) answer++;
+	}
+
+	return answer;
+}
+
+int main() {
+	int human_num;			// 사람의 수
+	int party_num;			// 파티의 수
+
+	cin >> human_num >> party_num;
+
+	vector<bool> true_list(human_num+1,false);		//	진실을 아는 사람의 리스트 (진실을 알면 true)
+	true_list_init(true_list);						//진실을 아는 사람 리스트 초기값 적용
+	
+		
+	vector<vector<int>> party_list;				//파티리스트 별 참여명단
+	vector<vector<bool>> party_list_visit;		//파티리스트 별 참여명단 체크용(명단 업데이트 및 정답구하기에 활용)
+	
+	party_list_init(party_list, party_list_visit, party_num);	//파티리스트 별 명단 초기값 적용
+	
+
+	vector<bool> can_lie_party(party_list.size(),true);		// 거짓말이 가능한 파티는 true로 표기
+	party_list_update(true_list, party_list, party_list_visit, can_lie_party);		//파티리스트 명단 내 진실 아는사람 및 거짓말 가능한 파티 업데이트
+	
+	cout << answer_output(can_lie_party);	//정답 출력
+
+	return 0;
+}
