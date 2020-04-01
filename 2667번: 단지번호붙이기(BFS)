@@ -1,0 +1,91 @@
+#include <iostream>
+#include <queue>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int dx[] = { 0,0,1,-1 };
+int dy[] = { 1,-1,0,0 };
+
+void read(vector<vector<char>>& arr, vector<vector<bool>>& visit) {
+	int size;
+	cin >> size;
+
+	arr.resize(size, vector<char>(size));
+	visit.resize(size, vector<bool>(size, false));
+
+	for (int row = 0; row < size; row++) {
+		for (int col = 0; col < size; col++) {
+			cin >> arr[row][col];
+		}
+	}
+
+}
+
+int bfs(char data, int row, int col,const vector<vector<char>>& arr, vector<vector<bool>>& visit) {
+	
+	queue<pair<int, int>> Q;	// pair에는 row와 column의 좌표값을 저장
+	
+	int answer=1;
+
+	Q.push(make_pair(row, col));
+	visit[row][col] = true;
+
+	while (!Q.empty()) {
+		pair<int, int> idx;
+		idx = Q.front();
+		Q.pop();
+		
+		for (int i = 0;i < 4;i++) {
+			int arow = idx.first + dy[i];
+			int acol = idx.second + dx[i];
+
+			if (arow < arr.size() && arow >= 0 && acol < arr[arow].size() && acol >= 0 && !visit[arow][acol] && arr[arow][acol] == '1') {
+				visit[arow][acol] = true;
+				Q.push(make_pair(arow, acol));
+				answer++;
+			}
+
+		}
+	}
+
+	return answer;
+}
+
+void solve(const vector<vector<char>>& arr, vector<vector<bool>>& visit, vector<int>& answer_list) {
+	
+	for (int row = 0;row < arr.size();row++) {
+		for (int col = 0; col < arr[row].size();col++) {
+			if (arr[row][col] == '1' && !visit[row][col]) {
+				int answer;
+				answer = bfs(arr[row][col], row, col, arr, visit);
+				answer_list.push_back(answer);
+			}
+
+		}
+	}
+}
+
+void answer_out(vector<int> answer_list) {
+	sort(answer_list.begin(), answer_list.end());
+
+	cout << answer_list.size() << '\n';
+	for (int i = 0;i < answer_list.size();i++) {
+		cout << answer_list[i] << '\n';
+	}
+	
+}
+int main() {
+
+	vector<vector<char>> arr;	//지도 정보 저장
+	vector<vector<bool>> visit;	//지도 방문 기록(BFS시 활용)
+	vector<int> answer_list;		//각 단지에 속하는 집의 수 저장
+
+	read(arr, visit);		//지도 정보 입력
+
+	solve(arr, visit, answer_list);		//BFS로 단지 개수 세기
+	answer_out(answer_list);			// 각 단지 내 집의 수를 오름차순으로 정렬 후 출력
+	
+	return 0;
+}
