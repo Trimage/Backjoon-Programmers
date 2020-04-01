@@ -1,0 +1,80 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <string>
+
+using namespace std;
+
+int dx[] = { 0,0,1,-1 };
+int dy[] = { 1,-1,0,0 };
+
+int answer = 0;
+
+void read(vector<vector<char>>& arr) {
+	int size;
+	cin >> size;
+
+	arr.resize(size, vector<char>(size));
+
+	for (int i = 0;i < size;i++) {
+		for (int j = 0;j < size;j++) {
+			cin >> arr[i][j];
+		}
+	}
+
+}
+
+void dfs(char data, int x, int y, const vector<vector<char>>&arr, vector<vector<bool>>& visit) {
+	if (visit[x][y] || arr[x][y] != data) return;
+
+	visit[x][y] = true;
+	answer++;
+
+	for (int i = 0;i < 4;i++) {
+		int ax = x + dx[i];
+		int ay = y + dy[i];
+
+		if (ax >= arr.size() || ax < 0 || ay >= arr.size() || ay < 0) continue;
+
+		dfs(data, ax, ay, arr, visit);
+	}
+
+}
+
+void solve(const vector<vector<char>>& arr, vector<vector<bool>>& visit, vector<int>& answer_list) {
+
+	for (int i = 0;i < arr.size();i++) {
+		for (int j = 0;j < arr[i].size();j++) {
+			if (arr[i][j] == '1' && !visit[i][j]) {
+				dfs(arr[i][j], i, j, arr, visit);
+				answer_list.push_back(answer);
+				answer = 0;
+			}
+		}
+	}
+
+}
+
+void answer_output(vector<int>& answer_list) {
+	sort(answer_list.begin(), answer_list.end());
+
+	cout << answer_list.size() << '\n';
+	for (int i = 0;i < answer_list.size();i++) {
+		cout << answer_list[i] << '\n';
+	}
+
+}
+
+int main() {
+
+	vector<vector<char>> arr;    //정사각형의 지도 정보 저장
+	read(arr);		//정사각형의 지도 정보 입력
+	vector<vector<bool>> visit(arr.size(), vector<bool>(arr.size(), false));	//DFS를 위한 방문여부 저장
+
+	vector<int> answer_list;		//값과 단지 수 저장
+
+	solve(arr, visit, answer_list);		// DFS로 단지 개수 세기
+	answer_output(answer_list);			// 각 단지내 집의 수를 오름차순으로 정렬 후 출력
+
+	return 0;
+}
