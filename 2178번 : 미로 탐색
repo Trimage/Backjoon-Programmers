@@ -59,5 +59,5 @@ int main() {
 
 	cout << cnt[arr.size() - 1][arr[arr.size() - 1].size() - 1];	//도착위치에 최소의 칸 수를 출력
 	
-	return 0;
+	return 0; 
 }
