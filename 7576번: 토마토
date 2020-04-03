@@ -1,0 +1,89 @@
+#include <iostream>
+#include <queue>
+
+using namespace std;
+
+void read(vector<vector<int>>& arr, vector<vector<int>>& cnt) {
+	int row, col;
+	cin >> col >> row;
+  
+	arr.clear();
+  cnt.clear();
+  arr.resize(row, vector<int>(col));
+	cnt.resize(row, vector<int>(col, -1));
+
+	for (int i = 0;i < row;i++) {
+		for (int j = 0;j < col;j++) {
+			cin >> arr[i][j];
+		}
+	}
+}
+
+void solve_init(queue<pair<int, int>>& Q, vector<vector<int>>& arr, vector<vector<int>>& cnt) {
+
+	for (int i = 0;i < arr.size();i++) {
+		for (int j = 0;j < arr[i].size();j++) {
+			if (arr[i][j] == 1) {
+				Q.push(make_pair(i, j));
+				cnt[i][j] = 0;
+			}
+		}
+	}
+}
+
+void bfs(queue<pair<int,int>>& Q, vector<vector<int>>& arr, vector<vector<int>>& cnt) {
+
+	int drow[] = { 0,0,1,-1 };
+	int dcol[] = { 1,-1,0,0 };
+
+	while (!Q.empty()) {
+		int row, col;
+		row = Q.front().first;
+		col = Q.front().second;
+		
+		Q.pop();
+
+		for (int i = 0;i < 4;i++) {
+			int arow, acol;
+			arow = row + drow[i];
+			acol = col + dcol[i];
+
+			if (arow >= 0 && arow < arr.size() && acol >= 0 && acol < arr[arow].size() && arr[arow][acol] == 0 && cnt[arow][acol] == -1) {
+				Q.push(make_pair(arow, acol));
+				arr[arow][acol] = 1;
+				cnt[arow][acol] = cnt[row][col] + 1;
+			}
+		}
+	}
+}
+
+int answer_output(const vector<vector<int>>& arr, const vector<vector<int>>& cnt) {
+	
+	int answer = 0;
+
+	for (int i = 0;i < arr.size();i++) {
+		for (int j = 0;j < arr[i].size();j++) {
+			if (arr[i][j] == 0) return -1;
+			answer = answer < cnt[i][j] ? cnt[i][j] : answer;
+			
+		}
+	}
+
+	return answer;
+}
+
+int main() {
+
+	vector<vector<int>> arr;		//토마토 상자 정보
+	vector<vector<int>> cnt;		// 모든 토마토가 익을 때 까지의 최소 날짜를 구하기 위한 일수 저장 (방문체크도 같이함)
+	queue<pair<int, int>> Q;		//BFS를 수행하기 위해 행과 열 값을 저장 하기 위한 Queue
+
+	read(arr, cnt);				// 토마토 상자 정보 입력
+	
+	solve_init(Q, arr, cnt);		//토마토 상자 내 익은 토마토 위치를 Queue에 삽입
+	bfs(Q, arr, cnt);			//상자 내 토마토들을 BFS로 익혀감
+
+	cout << answer_output(arr,cnt);			//상자 내 모든 토마토가 익은 경우 최소 일 출력, 익지않은 토마토가 있으면 -1 반환
+	
+	return 0;
+}
