@@ -1,0 +1,72 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void read(vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+	int row, col, cabbage;
+
+	cin >> col >> row >> cabbage;
+
+	arr.clear();
+	arr.resize(row, vector<int>(col, 0));
+	visit.clear();
+	visit.resize(row, vector<bool>(col, false));
+
+	int x, y;
+
+	for (int i = 0;i < cabbage;i++) {
+		cin >> x >> y;
+		arr[y][x] = 1;
+	}
+}
+
+int dx[] = { 0,0,1,-1 };
+int dy[] = { 1,-1,0,0 };
+
+void dfs(int y, int x, const vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+	if (arr[y][x] != 1 || visit[y][x]) return;
+
+	visit[y][x] = true;
+
+	for (int i = 0;i < 4;i++) {
+		int ay = y + dy[i];
+		int ax = x + dx[i];
+
+		if (ay >= 0 && ay < arr.size() && ax >= 0 && ax < arr[ay].size())
+			dfs(ay, ax, arr, visit);
+
+	}
+}
+
+int solve(const vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+
+	int answer = 0;
+
+	for (int i = 0;i < arr.size();i++) {
+		for (int j = 0; j < arr[i].size();j++) {
+			if (arr[i][j] == 1 && !visit[i][j]) {
+				dfs(i, j, arr, visit);
+				answer++;
+			}
+		}
+	}
+
+	return answer;
+}
+
+int main() {
+	int test_num;		//테스트 케이스 수
+
+	vector<vector<int>> arr;		//	배추밭 정보
+	vector<vector<bool>> visit;		//	배추밭 방문 여부
+
+	cin >> test_num;        //테스트 케이스
+
+	for (int i = 0;i < test_num;i++) {
+		read(arr, visit);        //배추밭 정보 입력 및 방문여부 초기화
+		cout << solve(arr, visit) << '\n';    //DFS 수행 후 배추흰지렁이 최소 개수 출력
+	}
+
+	return 0;
+}
