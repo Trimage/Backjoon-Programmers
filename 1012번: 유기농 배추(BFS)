@@ -1,0 +1,85 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+void read(vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+
+	int row, col, cabbage;
+	cin >> col >> row >> cabbage;
+
+	arr.clear();
+	visit.clear();
+	arr.resize(row, vector<int>(col));
+	visit.resize(row, vector<bool>(col, false));
+
+	int x, y;
+
+	for (int i = 0;i < cabbage;i++) {
+		cin >> x >> y;
+		arr[y][x] = 1;
+	}
+}
+
+void bfs(int y, int x, const vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+
+	int dy[] = { 0,0,1,-1 };
+	int dx[] = { 1,-1,0,0 };
+
+	queue<pair<int, int>> Q;		//BFS 수행에 필요한 queue로써 row와 col값을 저장함
+	
+	Q.push(make_pair(y, x));
+	visit[y][x] = true;
+
+	while (!Q.empty()) {
+		int yy = Q.front().first;
+		int xx = Q.front().second;
+
+		Q.pop();
+
+		for (int i = 0;i < 4;i++) {
+			int ay, ax;
+			ay = yy + dy[i];
+			ax = xx + dx[i];
+
+			if (ay >= 0 && ay < arr.size() && ax >= 0 && ax < arr[ay].size() && arr[ay][ax] == 1 && !visit[ay][ax]) {
+				Q.push(make_pair(ay, ax));
+				visit[ay][ax] = true;
+			}
+		}
+	}
+}
+
+int solve(const vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+	int answer = 0;
+
+	for (int i = 0;i < arr.size();i++) {
+		for (int j = 0;j < arr[i].size(); j++) {
+			if (arr[i][j] == 1 && !visit[i][j]) {
+				bfs(i, j, arr, visit);
+				answer++;
+			}
+		}
+	}
+
+	return answer;
+}
+
+int main() {
+
+	int test_num;		//테스트 케이스 수
+
+	vector<vector<int>> arr;		//	배추밭 정보
+	vector<vector<bool>> visit;		//	배추밭 방문 여부
+
+
+	cin >> test_num;
+
+	for (int i = 0;i < test_num;i++) {
+		read(arr, visit);        //배추밭 정보 입력 및 방문여부 초기화
+		cout << solve(arr, visit) << '\n';    //BFS 수행 후 배추흰지렁이 최소 개수 출력
+	}
+
+	return 0;
+}
