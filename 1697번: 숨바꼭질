@@ -1,0 +1,52 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#define MAX 100001
+using namespace std;
+
+void init(int& start, int& target) {
+	cin >> start >> target;
+}
+
+int solve(const int start, const int target) {
+    if(start==target) return 0;
+
+	vector<bool> visit(MAX, false);    //탐색 여부 저장
+	queue<pair<int, int>> Q;			//BFS 탐색에 사용 됨 <위치정보, 이동시간>이 저장
+	vector<int> route;			//이동경로 저장, 현위치가 X 인경우 { X-1, X+1, X*2} 저장
+
+	int answer = 0;
+
+	Q.push(make_pair(start, 0));
+	visit[start] = true;
+
+	while (!Q.empty()) {
+		int current, cnt;
+		current = Q.front().first;
+		cnt = Q.front().second;
+
+		Q.pop();
+
+		route = { current - 1, current + 1, current * 2 };
+
+		for (int i = 0;i < 3;i++) {
+			if (route[i] >= 0 && route[i] < 100001 && !visit[route[i]]) {
+				visit[route[i]] = true;
+				Q.push(make_pair(route[i], cnt + 1));
+			}
+		}
+
+		if (visit[target]) return cnt + 1;
+	}
+	
+	return -1;
+}
+
+int main() {
+	int start, target;
+	init(start, target);
+	
+	cout << solve(start, target);
+
+	return 0;
+}
