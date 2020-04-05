@@ -1,0 +1,97 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+class node {
+public :
+	int data;
+	vector<node*> edge;
+};
+
+bool cmp(node* a, node* b) {
+	if (a->data < b->data) return true;
+	return false;
+}
+
+int read(vector<node>& arr,vector<bool>& visit) {
+
+	arr.clear();
+	visit.clear();
+
+	int vertex, edge_num, start;
+	cin >> vertex >> edge_num >> start;
+
+	arr.resize(vertex + 1);
+	visit.resize(vertex + 1,false);
+
+	int a, b;				// a에서 b로 가는 간선
+	for (int i = 0;i < edge_num;i++) {
+		cin >> a >> b;
+
+		arr[a].data = a;
+		arr[b].data = b;
+
+		arr[a].edge.push_back(&arr[b]);
+		arr[b].edge.push_back(&arr[a]);
+	}
+
+	for (int i = 1; i <= vertex;i++) {			//방문할 수 있는 정점 번호를 오름차순으로 정렬
+		sort(arr[i].edge.begin(), arr[i].edge.end(), cmp);
+	}
+
+	return start;
+}
+
+
+void dfs(node* nd, vector<bool>& visit) {
+	if (visit[nd->data]) return;
+
+	visit[nd->data] = true;
+
+	cout << nd->data << ' ';
+	
+	for (int i = 0;i < nd->edge.size();i++) {
+		dfs(nd->edge[i],visit);
+	}
+}
+
+void bfs(node* nd, vector<bool>& visit) {
+	queue<node*> Q;			//BFS를 수행하기 위한 Queue 선언
+	
+	Q.push(nd);
+	visit[nd->data] = true;
+
+	while (!Q.empty()) {
+		node* nnd = Q.front();
+		Q.pop();
+
+		cout << nnd->data << ' ';
+		
+		for (int i = 0;i < nnd->edge.size();i++) {
+			if (!visit[nnd->edge[i]->data]) {
+				Q.push(nnd->edge[i]);
+				visit[nnd->edge[i]->data] = true;
+			}
+		}
+	}
+}
+
+int main() {
+	
+	vector<node> arr;		//그래프 저장
+	vector<bool> visit;		// DFS, BFS 수행 시 탐색여부 저장
+	
+	int start = read(arr,visit);		//그래프 정보를 입력 한 후 탐색을 시작할 정점의 번호를 반환하여 저장
+
+	dfs(&arr[start],visit);			//DFS를 수행한 결과를 출력
+	cout << '\n';
+
+	fill(visit.begin(), visit.end(), false);	//BFS를 수행하기 위해 탐색여부 초기화
+
+	bfs(&arr[start],visit);			//BFS를 수행한 결과를 출력
+
+	return 0;	
+}
