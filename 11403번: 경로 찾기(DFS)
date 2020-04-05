@@ -1,0 +1,60 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void read(vector<vector<int>>& arr, vector<bool>& visit) {
+	int n;
+	cin >> n;
+
+	arr.clear();
+	visit.clear();
+
+	arr.resize(n, vector<int>(n, 0));
+	visit.resize(n, false);
+	
+	for (int i = 0;i < n;i++) {
+		for (int j = 0;j < n;j++) {
+			cin >> arr[i][j];
+		}
+	}
+}
+
+void dfs(int y, int x, vector<vector<int>>& arr, vector<bool>& visit) {
+	if (visit[x]) return;
+	
+	visit[x] = true;
+
+	for (int i = 0;i < arr[x].size();i++) {
+		if(arr[x][i]==1) dfs(y, i, arr, visit);
+	}
+}
+
+void answer_output(vector<bool>& visit) {
+	for (int k = 0;k < visit.size();k++) {
+		if(visit[k]) cout << "1 ";
+        else cout << "0 ";
+	}
+	cout << '\n';
+}
+
+void solve(vector<vector<int>>& arr, vector<bool>& visit) {
+	for (int i = 0;i < arr.size();i++) {
+		for (int j = 0;j < arr.size();j++) {
+			if (arr[i][j] == 1) dfs(i, j, arr, visit);
+		}
+
+		answer_output(visit);
+		fill(visit.begin(), visit.end(), false);
+	}
+}
+
+int main() {	
+	vector<vector<int>> arr;		//그래프의 인접행렬 저장
+	vector<bool> visit;		//그래프 방문여부 저장
+	
+	read(arr, visit);			//그래프 인접행렬 입력
+	solve(arr, visit);			//DFS 수행 후 정답 출력
+
+	return 0;
+}
