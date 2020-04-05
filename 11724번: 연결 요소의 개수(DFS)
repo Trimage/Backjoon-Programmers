@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+class node {
+public :
+	bool visit = false;
+	vector<node*> edge;
+
+};
+
+void read(vector<node>& arr) {
+	int vertex, edge;
+	cin >> vertex >> edge;
+
+	arr.resize(vertex + 1);
+
+	int a, b;
+
+	for (int i = 0;i < edge;i++) {		//간선 연결
+		cin >> a >> b;
+
+		arr[a].edge.push_back(&arr[b]);
+		arr[b].edge.push_back(&arr[a]);
+	}
+}
+
+void dfs(node* nd) {
+	if (nd->visit) return;
+
+	nd->visit = true;
+	
+	for (int i = 0;i < nd->edge.size();i++) {
+		dfs(nd->edge[i]);
+	}
+}
+
+int solve(vector<node>& arr) {
+
+	int answer = 0;
+	
+	for (int i = 1;i < arr.size();i++) {
+		if (!arr[i].visit) {
+			dfs(&arr[i]);
+			answer++;
+		}
+	}
+
+	return answer;
+}
+
+int main() {
+    ios_base::sync_with_stdio(false);
+    
+	vector<node> arr;		//그래프 정보를 저장
+	
+	int answer;			// 연결 요소의 개수(최종 출력 값)
+
+	read(arr);		// 그래프 정보 초기화 및 간선 연결
+	answer = solve(arr);		// DFS 수행하여 연결요소의 개수를 반환
+
+	cout << answer;
+
+	return 0;
+}
