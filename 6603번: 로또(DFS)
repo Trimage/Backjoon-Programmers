@@ -1,0 +1,54 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+void read(const int num, vector<int>& arr, vector<bool>& visit) {
+
+	arr.clear();
+	arr.resize(num);
+
+	visit.clear();
+	visit.resize(num,false);
+
+	for (int i = 0;i < num;i++) {
+		cin >> arr[i];
+	}
+
+}
+
+void dfs(int idx, int cnt, const vector<int>& arr, vector<int>& answer) {
+	if (cnt == 6) {
+		for (int i = 0;i < 6;i++) {
+			cout << answer[i] << ' ';
+		}
+		cout << '\n';
+
+		return;
+	}
+
+	for (int i = idx;i < arr.size();i++) {
+		answer[cnt] = arr[i];
+		dfs(i+1, cnt + 1, arr, answer);
+	}
+
+}
+int main() {
+	vector<int> arr;
+	vector<bool> visit;
+	vector<int> answer(6);
+
+	int num;
+
+	while (1) {
+		cin >> num;
+		
+		if (num == 0) break;
+
+		read(num,arr,visit);			//로또 집합 입력
+		dfs(0, 0, arr, answer);			//로또 경우의 수 출력
+		cout << '\n';
+	}
+
+	return 0;
+}
