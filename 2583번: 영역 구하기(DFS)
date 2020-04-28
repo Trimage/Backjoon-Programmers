@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <queue>
+
+using namespace std;
+
+int dx[] = { 0,0,1,-1 };
+int dy[] = { 1,-1,0,0 };
+
+void read(vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+	int row, col, range;
+	cin >> row >> col >> range;
+
+	arr.resize(row, vector<int>(col, 0));
+	visit.resize(row, vector<bool>(col, false));
+
+	for (int i = 0;i < range;i++) {
+		int left_down_x, left_down_y, right_up_x, right_up_y;
+		cin >> left_down_x >> left_down_y >> right_up_x >> right_up_y;
+
+		for (int row = left_down_y; row < right_up_y; row++) {
+			for (int col = left_down_x; col < right_up_x; col++) {
+				arr[row][col] = 1;
+			}
+		}
+	}
+	
+}
+
+void dfs(const vector<vector<int>>& arr, vector<vector<bool>>& visit, int row, int col, int& cnt) {
+
+	if (visit[row][col] || arr[row][col] == 1) return;
+
+	visit[row][col] = true;
+	cnt++;
+
+	for (int i = 0;i < 4;i++) {
+		int ay = row + dy[i];
+		int ax = col + dx[i];
+
+		if (ay >= 0 && ay < arr.size() && ax >= 0 && ax < arr[ay].size() && arr[ay][ax] == 0 && !visit[ay][ax]) 
+			dfs(arr, visit, ay, ax, cnt);
+	}
+}
+
+vector<int> solve(const vector<vector<int>>& arr, vector<vector<bool>>& visit) {
+
+	vector<int> answer;
+
+	for (int row = 0; row < arr.size(); row++) {
+		for (int col = 0; col < arr[row].size(); col++) {
+			if (arr[row][col] == 0 && !visit[row][col]) {
+				int cnt = 0;
+				dfs(arr, visit, row, col,cnt);
+				answer.push_back(cnt);
+			}
+		}
+		
+	}
+
+	sort(answer.begin(), answer.end());
+	
+	return answer;
+}
+
+void output(const vector<int> answer) {
+	cout << answer.size() << '\n';
+
+	for (int i = 0;i < answer.size();i++) {
+		cout << answer[i] << ' ';
+	}
+}
+
+
+int main() {
+	vector<vector<int>> arr;
+	vector<vector<bool>> visit;
+	vector<int> answer;
+	
+	read(arr, visit);		//모눈종이의 좌표 및 빗금표시 (빗금한 경우 1로 표기)
+	answer = solve(arr, visit);		// 빗금쳐지지 않은 분리된 영역의 개수 및 넓이를 계산하여 정렬
+
+	output(answer);		//분리된 영역의 개수 및 넓이를 출력
+
+	return 0;	
+}
