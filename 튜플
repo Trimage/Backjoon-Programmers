@@ -1,0 +1,63 @@
+#include <string>
+#include <vector>
+#include <set>
+#include <algorithm>
+
+using namespace std;
+
+/*
+1. S문자열을 arr 2차원 벡터에 저장
+2. 2차원 arr벡터를 arr 벡터 내 있는 벡터크기기준 오름차순으로 정렬
+3. Set을 활용하여 호출되지 않았던 값을 result 벡터에 순차적으로 저장
+
+
+*/
+
+bool cmp(vector<int> a, vector<int> b) {
+    if (a.size() < b.size()) return true;
+    return false;
+}
+
+vector<int> solution(string s) {
+    vector<vector<int>> arr;
+    vector<int> tmp;
+    set <int> S;
+    
+    bool check=false;
+    string str="";
+    int idx=0;
+    
+    for(int i=2;i<s.size()-1;i++) {
+        if (s[i] >= '0' && s[i] <='9') {
+            str = str + s[i];
+        }
+        else if (s[i]== ',') {
+            if(s[i-1]=='}') continue;
+            
+            tmp.push_back(atoi(str.c_str()));
+            str="";
+        }
+        else if (s[i] == '}') {
+            tmp.push_back(atoi(str.c_str()));
+            arr.push_back(tmp);
+            tmp.clear();
+            str="";
+        }
+    }
+    
+    sort(arr.begin(),arr.end(),cmp);
+    
+    
+    vector<int> answer;
+    
+    for(int i=0;i<arr.size();i++) {
+        for (int j=0;j<arr[i].size();j++) {
+            if(S.find(arr[i][j])==S.end()) {
+                S.insert(arr[i][j]);
+                answer.push_back(arr[i][j]);
+            };
+        }
+    }
+    
+    return answer;
+}
