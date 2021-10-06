@@ -1,0 +1,14 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+int v[5] = {781, 156, 31, 6, 1 };
+
+int solution(string s) {
+	int ret = 0;
+	for (int i = 0; i < s.size(); i++)
+		ret += string("AEIOU").find(s[i]) * v[i] + 1;
+	return ret;
+  
+}
