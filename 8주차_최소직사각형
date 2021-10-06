@@ -1,0 +1,17 @@
+#include <string>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+int solution(vector<vector<int>> sizes) {
+    int l_max=0, r_max=0;
+    
+    for(auto data : sizes) {        
+        l_max = max(l_max, min(data[0],data[1]));
+        r_max = max(r_max, max(data[0],data[1]));
+    }
+    
+    int answer = l_max * r_max;
+    return answer;
+}
