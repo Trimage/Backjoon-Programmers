@@ -1,0 +1,97 @@
+#include <string>
+#include <vector>
+#include <iostream>
+
+#include <algorithm>
+
+using namespace std;
+
+class Boxer{
+public :
+    // 무게, 번호, 승률
+    // 이긴횟수, 진 횟수, 자기몸무게보다 무거운 복서를 이긴 횟수
+    int weight=0;
+    int num=0;
+    double winning_rate=0.0;
+    int win_count=0;
+    int lose_count=0;
+    int win_over_weight_count=0;
+    
+    Boxer(int weight, int num) {
+        this->weight = weight;
+        this->num = num+1;
+        this->winning_rate = 0.0;
+    }
+    
+    //승리처리
+    void this_win(Boxer& loser) {
+        this->win_count++;
+        if(this->weight < loser.weight)
+            win_over_weight_count++;
+    }
+    
+    // 패배처리
+    void this_lose() {
+        lose_count++;
+    }
+    
+    // 승률 계산
+    void compute_winning_rate() {
+        winning_rate = win_count / double((win_count + lose_count));
+    }
+};
+
+// 정렬 사용자 정의
+// 문제 설명과 동일하게 정렬
+/*/
+1. 전체 승률 높은 복서 내림차 순
+2. 자신보다 무거운 복서를 이긴 횟수 내림차 순
+3. 복서 무게 오름차 순
+4. 복서 번호 오름차 순
+*/
+bool cmp(Boxer a, Boxer b) {
+    if(a.winning_rate == b.winning_rate){
+        if(a.win_over_weight_count == b.win_over_weight_count) {
+            if(a.weight == b.weight) {
+                return a.num < b.num;
+            }
+            return a.weight > b.weight;
+        }
+        return a.win_over_weight_count > b.win_over_weight_count;
+    }
+    return a.winning_rate > b.winning_rate;
+}
+
+vector<int> solution(vector<int> weights, vector<string> head2head) {
+    vector<int> answer;
+    
+    vector<Boxer> arr;
+    
+    for(int i=0;i<weights.size();i++) 
+        arr.push_back(Boxer(weights[i], i));
+    
+    for(int i=0;i<head2head.size();i++) {
+        for(int j=0;j<i ;j++) {
+            if(head2head[i][j] == 'N') continue;
+            
+            else if(head2head[i][j] == 'W') {
+                arr[i].this_win(arr[j]);
+                arr[j].this_lose();
+            }
+            else if(head2head[i][j] == 'L'){
+                arr[j].this_win(arr[i]);
+                arr[i].this_lose();
+            }
+            
+            arr[i].compute_winning_rate();
+            arr[j].compute_winning_rate();
+        }
+    }
+    
+    sort(arr.begin(), arr.end(), cmp);
+    
+    for(auto boxer : arr)
+        answer.push_back(boxer.num);
+    
+    return answer;
+}
