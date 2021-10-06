@@ -1,0 +1,65 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <map>
+#include <cmath>
+
+using namespace std;
+
+// bfs로 특정 방향으로 갔을때의 연결된 모든 송전탑의 개수를 셈
+int bfs(int standard, int start, vector<map<int,int>>& edge, vector<bool> visit) {
+    queue<int> q;
+    visit[standard] = true;
+    visit[start] = true;
+    q.push(start);
+    
+    int cnt = 0;
+    
+    while(!q.empty()) {
+        int num = q.front();
+        q.pop();
+        cnt++;
+        
+        for(auto it = edge[num].begin(); it != edge[num].end(); it++) {
+            int target = it->first;
+            if(!visit[target]) {
+                q.push(target);
+                visit[target] = true;
+            }
+        }
+    }
+    return cnt;
+}
+
+
+int solution(int n, vector<vector<int>> wires) {
+    //lvalue 연결된 노드번호, rvalue lvalue와 연결된 노드개수
+    vector<map<int,int>> edge(n+1);
+    
+    for(auto data : wires) {
+        edge[data[0]][data[1]] = 0;
+        edge[data[1]][data[0]] = 0;
+    }
+    
+    vector<bool> visit(n+1, false);
+    
+    for(int i=1;i<=n;i++) {
+        for(auto it = edge[i].begin(); it != edge[i].end(); it++)
+            it->second = bfs(i, it->first, edge, visit);
+    }
+    
+    int answer = 101;
+    
+    int start, end;
+    //브루트포스로 송전탑 개수 비교
+    for(auto data : wires) {
+        start = data[0];
+        end = data[1];
+        
+        int gap = abs(edge[start][end] * 2 - n);
+        
+        answer = gap < answer ? gap : answer;
+    }
+    
+    return answer;
+}
