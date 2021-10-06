@@ -1,0 +1,61 @@
+#include <string>
+#include <vector>
+#include <queue>
+#include <map>
+
+
+using namespace std;
+
+// priority_queue 힙정렬 기준 사용자 정의
+// 점수가 높을수록, 이름의 사전순이 빠른 순으로 정렬
+struct cmp {
+    bool operator()(pair<int, string> a, pair<int, string> b) {
+        if(a.first == b.first) 
+            return a.second > b.second;
+        return a.first < b.first;
+    }
+};
+
+
+// 직업군 언어 점수를 정리한 문자열 배열인 table을
+// 이름들을 정리하여 리스트에 정리후 반환
+vector<string> decode(string table) {
+    vector<string> arr;
+    
+    int idx = table.find(' ');
+    
+    while(idx != -1) {
+        arr.push_back(table.substr(0, idx));
+        table.erase(0, idx+1);
+        idx = table.find(' ');
+    }
+    arr.push_back(table);
+    
+    return arr;
+}
+
+
+string solution(vector<string> table, vector<string> languages, vector<int> preference) {
+    priority_queue<pair<int, string>, vector<pair<int,string>>, cmp> PQ;
+    map<string, int> score;
+    
+    // map에 각 언어별 점수를 정리
+    for(int i=0; i<languages.size(); i++) {
+        score[languages[i]] = preference[i];
+    }
+    
+    // table에 주어진 직업군 언어점수와 언어 선호도의 총합을 계산
+    for(int i=0;i<table.size(); i++) {
+        vector<string> arr = decode(table[i]);
+        
+        int result = 0;
+        
+        for(int j=1;j<arr.size();j++) {
+            result += (6-j) * score[arr[j]];
+        }
+        
+        PQ.push(make_pair(result, arr[0]));
+    }
+    
+    return PQ.top().second;
+}
