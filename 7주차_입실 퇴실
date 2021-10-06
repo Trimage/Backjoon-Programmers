@@ -1,0 +1,39 @@
+#include <string>
+#include <vector>
+
+using namespace std;
+
+vector<int> solution(vector<int> enter, vector<int> leave) {
+    int max_num = enter.size();
+
+    vector<int> answer;
+    vector<pair<int,int>> arr(enter.size(), make_pair(-1,-1));
+    
+    int e_idx = 0, l_idx = 0;
+    int time = 0;
+    while(e_idx < max_num || l_idx < max_num) {
+        arr[enter[e_idx++] - 1].first = time;
+        
+        while(l_idx<max_num){
+            if(arr[leave[l_idx] - 1].first != -1)
+                arr[leave[l_idx++] - 1].second = time;
+            else break;
+        }
+        
+        time++;
+    }
+    
+    for(int i=0;i<arr.size();i++){
+        int cnt = 0;
+        for(int j=0;j<arr.size();j++){
+            if(i==j) continue;
+            if(arr[i].first >= arr[j].first && arr[i].first <= arr[j].second) cnt++;
+            else if(arr[i].second >= arr[j].first && arr[i].second <= arr[j].second) cnt++;
+            else if(arr[j].first >= arr[i].first && arr[j].first <= arr[i].second) cnt++;
+            else if(arr[j].second >= arr[i].first && arr[j].second <= arr[i].second) cnt++; 
+        }
+        answer.push_back(cnt);
+    }
+    
+    return answer;
+}
