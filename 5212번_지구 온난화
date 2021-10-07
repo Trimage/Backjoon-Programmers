@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int dx[] = {0, 0, 1, -1};
+int dy[] = {1, -1, 0, 0};
+
+// 땅이 잠기는 지 확인
+bool check_land(int y, int x, const vector<vector<char>>& arr){
+    int cnt = 0;
+    
+    for(int i=0;i<4;i++) {
+        int ay = y + dy[i];
+        int ax = x + dx[i];
+        
+        if(ay < 0 || ay >= arr.size() || ax < 0 || ax >= arr[ay].size() || arr[ay][ax]=='.')
+            cnt++;
+    }
+    
+    bool result;
+    result = cnt >= 3 ? true : false;
+    
+    return result;
+}
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int r,c;
+    cin >> r >> c;
+    
+    vector<vector<char>> arr(r, vector<char>(c));
+    for(int i=0;i<r;i++){
+        for(int j=0;j<c;j++) {
+            cin >> arr[i][j];
+        }
+    }
+    
+    vector<vector<char>> tmp = arr;
+    pair<int,int> left_up(r-1,c-1);
+    pair<int,int> right_down(0, 0);
+    
+    for(int i=0;i<r;i++) {
+        for(int j=0;j<c;j++) {
+            if(arr[i][j] == 'X') {
+                if(check_land(i, j, arr))
+                    tmp[i][j] = '.';
+                else {
+					left_up.first = left_up.first > i ? i : left_up.first;
+					left_up.second = left_up.second > j ? j : left_up.second;
+					right_down.first = right_down.first < i ? i : right_down.first;
+					right_down.second = right_down.second < j ? j : right_down.second;
+                }
+            }
+        }
+    }
+    
+    for(int i=left_up.first;i<=right_down.first;i++) {
+        for(int j=left_up.second;j<=right_down.second;j++) {
+            cout << tmp[i][j];
+        }
+        cout << '\n';
+    }
+    
+    return 0;
+}
