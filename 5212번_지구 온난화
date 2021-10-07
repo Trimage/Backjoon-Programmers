@@ -40,6 +40,9 @@ int main() {
     }
     
     vector<vector<char>> tmp = arr;
+    
+    //출력할 최적의 사이즈를 저장
+    //lvalue는 row, rvalue는 col
     pair<int,int> left_up(r-1,c-1);
     pair<int,int> right_down(0, 0);
     
@@ -48,11 +51,12 @@ int main() {
             if(arr[i][j] == 'X') {
                 if(check_land(i, j, arr))
                     tmp[i][j] = '.';
+		//물에 잠기지 않았을 경우 출력할 최적의 사이즈를 측정
                 else {
-					left_up.first = left_up.first > i ? i : left_up.first;
-					left_up.second = left_up.second > j ? j : left_up.second;
-					right_down.first = right_down.first < i ? i : right_down.first;
-					right_down.second = right_down.second < j ? j : right_down.second;
+		    left_up.first = left_up.first > i ? i : left_up.first;
+		    left_up.second = left_up.second > j ? j : left_up.second;
+		    right_down.first = right_down.first < i ? i : right_down.first;
+		    right_down.second = right_down.second < j ? j : right_down.second;
                 }
             }
         }
