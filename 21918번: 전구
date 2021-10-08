@@ -1,0 +1,79 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+
+// 1번 명령어
+void change_state(int n, int goal, vector<int>& arr) {
+	arr[n] = goal;
+}
+
+// 2번 명령어
+void reverse(int l, int r, vector<int>& arr) {
+	
+	while(l<r) {
+		arr[l] = arr[l] == 1 ? 0 : 1;
+		l++;
+	}
+}
+
+// 3번 명령어
+void power_off(int l, int r, vector<int>& arr) {
+	while(l<r) {
+		arr[l] = false;
+		l++;
+	}
+}
+
+// 4번 명령어
+void power_on(int l, int r, vector<int>& arr) {
+	while(l<r) {
+		arr[l] = true;
+		l++;
+	}
+}
+
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+	vector<int> arr;
+	
+	int n, order;
+	cin >> n >> order;
+	
+	int cur;
+	for(int i=0;i<n;i++) {
+		cin >> cur;
+		arr.push_back(cur);
+	}
+	
+	int a,b,c;
+	for(int i=0;i<order;i++) {
+		cin >> a >> b >> c;
+		b--;
+		switch(a) {
+			case 1:
+				change_state(b, c, arr);
+				break;
+			case 2:
+				reverse(b, c, arr);
+				break;
+			case 3:
+				power_off(b, c, arr);
+				break;
+			case 4:
+				power_on(b, c, arr);
+				break;
+		}
+	}
+	
+	
+	for(int i=0;i<n;i++) 
+		cout << arr[i] << ' ';
+	
+    return 0;
+}
