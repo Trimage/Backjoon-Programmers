@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+/*
+맨 왼쪽과 맨 오른쪽은 빗물이 고일수 없으므로 두 개는 참조하지 않고 리스트를 돌며 진행
+
+1. 현재위치 기준 왼쪽까지의 가장 높은 기둥과 오른쪽까지의 가장 높은 기둥을 비교
+2. 1번에서 나온 두 기둥 중 낮은 기둥 높이를 기준으로 삼음
+3. 현재 참조된 기둥의 위치가 1번의 두개보다 낮은 경우에만, 2번과의 차이만큼 빗물이 고임
+*/
+
+int main() {
+	ios::sync_with_stdio(false);
+	cin.tie(NULL);
+	
+	int h, w;
+	cin >> h >> w;
+	
+	vector<int> arr(w);
+	
+	for(int i=0;i<w;i++) 
+		cin >> arr[i];
+	
+	int answer = 0;
+	
+  // 맨 왼쪽과 맨 오른쪽은 계산하지않음
+	for(int i=1;i<w-1;i++) {
+		int l = *max_element(arr.begin(), arr.begin() + i);
+		int r = *max_element(arr.begin() + i, arr.end());
+		
+		int cur = arr[i];
+		int idx = l < r ? l : r;
+		
+		if(cur < l && cur < r)
+			answer += idx - cur;
+	}
+	
+	cout << answer;
+	return 0;
+}
