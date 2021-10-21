@@ -1,0 +1,62 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+#define INF 2100000001
+
+using namespace std;
+
+void dijktra(int start, vector<int>& arr, vector<vector<pair<int,int>>>& edge) {
+	priority_queue<pair<int,int>> pq;
+	
+	arr[start] = 0;
+	
+	pq.push(make_pair(0, start));
+	
+	while(!pq.empty()) {
+		int val = -pq.top().first;
+		int cur = pq.top().second;
+		
+		pq.pop();
+		
+		if(arr[cur] < val) continue;
+		
+		for(int i=0;i<edge[cur].size();i++) {
+			int n_val = edge[cur][i].first + val;
+			int next = edge[cur][i].second;
+			
+			if(arr[next] > n_val) {
+				arr[next] = n_val;
+				pq.push(make_pair(-n_val, next));
+			}
+		}
+	}	
+}
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+	
+	int city, bus;
+	cin >>city >> bus;
+	
+	vector<vector<pair<int,int>>> edge(city+1);
+	vector<int> arr(city+1, INF);
+	
+	for(int i=0;i<bus;i++) {
+		int a, b, c;
+		cin >> a >> b >> c;
+		edge[a].push_back(make_pair(c,b));
+	}
+	
+	
+	int start, end;
+	cin >> start >> end;
+	
+	dijktra(start, arr, edge);
+	cout << arr[end];
+	
+	
+	return 0;
+}
