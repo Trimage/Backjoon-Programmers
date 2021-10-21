@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int get_parent(int n, vector<int>& parent) {
+	if(parent[n] == n) return n;
+	
+	return parent[n] = get_parent(parent[n], parent);
+}
+
+void union_parent(int a, int b, vector<int>& parent) {
+	a = get_parent(a, parent);
+	b = get_parent(b, parent);
+	
+	if(a < b) parent[b] = a;
+	else parent[a] = b;
+}
+
+bool same_parent(int a, int b, vector<int>& parent) {
+    a = get_parent(a, parent);
+    b = get_parent(b, parent);
+			
+	if(a == b) return true;
+    else return false;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+	int n, m;
+	cin >> n >> m;
+	
+	vector<int> parent(n+1);
+	
+	for(int i=1;i<=n;i++)
+		parent[i]= i;
+	
+	
+	int num;
+	for(int i=1;i<=n;i++) {
+		for(int j=1;j<=n;j++) {
+			cin >> num;
+			
+			if(num == 1) union_parent(i, j, parent);
+		}
+	}
+	
+	int idx_parent = -1;
+	bool check = true;
+	for(int i=0;i<m;i++) {
+		int tmp;
+		cin >> tmp;
+		
+		int tmp_parent = get_parent(tmp, parent);
+		idx_parent = idx_parent == -1 ? tmp_parent : idx_parent;
+		
+		if(idx_parent != tmp_parent) {
+			check = false;
+			break;
+		}
+	}
+	
+	if(check) cout << "YES";
+	else cout << "NO";
+	
+	return 0;
+}
