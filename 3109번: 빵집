@@ -1,0 +1,59 @@
+#include <iostream>
+#include <vector>
+using namespace std;
+
+int answer = 0;
+
+int dy[] = {-1, 0, 1};
+int dx[] = {1, 1, 1};
+
+/*
+1. 오른쪽 위 대각선, 오른쪽, 오른쪽 아래 대각선 순으로 연결
+2. 끝열과 연결이 되면 바로 return true해서 dfs종료
+etc. dfs종료하는 이유는 다른 범위를 침범하지 않아야 다른 경로가 테스트 할 수 있는 칸을 확보할 수 있기 때문,
+그래서 1번순으로 연결해야함(순서가 바뀌면 결과도 바뀜)
+*/ 
+
+bool dfs(int y, int x, vector<vector<char>>& arr, vector<vector<bool>>& visit) {
+	if(x == arr[y].size() - 1) {
+		answer++;
+		return true;
+	}
+	
+	visit[y][x] = true;
+	
+	for(int i=0;i<3;i++) {
+		int ay = y + dy[i];
+		int ax = x + dx[i];
+		
+		if(ay >= 0 && ay < arr.size() && ax >= 0 && ax < arr[ay].size() && arr[ay][ax] == '.' && !visit[ay][ax]) {
+			if(dfs(ay, ax, arr, visit)) return true;
+		}
+	}
+	
+	return false;
+}
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+		
+	int r, c;
+	cin >> r >> c;
+	vector<vector<char>> arr(r, vector<char>(c));
+	vector<vector<bool>> visit(r, vector<bool>(c, false));
+	
+	for(int i=0;i<r;i++){
+		for(int j=0;j<c;j++) {
+			cin >> arr[i][j];
+		}
+	}
+	
+	for(int i=0;i<r;i++) 
+		dfs(i, 0, arr, visit);
+	
+	cout << answer;
+	
+	return 0;
+}
