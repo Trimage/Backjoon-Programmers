@@ -1,0 +1,87 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int dy[] = {0, 0, -1, 1};
+int dx[] = {1, -1, 0, 0};
+
+// 외부공기 표시
+void refresh_air(int y, int x, vector<vector<int>>& cheese, vector<vector<bool>>& air){
+	if(air[y][x]) return;
+	
+	air[y][x] = true;
+	
+	for(int i=0; i<4; i++) {
+		int ay = y + dy[i];
+		int ax = x + dx[i];
+		
+		if(ay >= 0 && ay < air.size() && ax >= 0 && ax < air[ay].size() && cheese[ay][ax] == 0 && !air[ay][ax])
+			refresh_air(ay, ax, cheese, air);
+	}
+}
+
+
+// 주변에 외부공기가 있는지 확인
+bool check_around_air(int y, int x, vector<vector<int>>& cheese, vector<vector<bool>>& air) {
+	for(int i=0;i<4;i++) {
+		int ay = y + dy[i];
+		int ax = x + dx[i];
+		
+		if(ay >= 0 && ay < air.size() && ax >= 0 && ax < air[ay].size() && cheese[ay][ax] == 0 && air[ay][ax])
+			return true;
+	}
+	
+	return false;
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+	
+	int r, c;
+	cin >> r >> c;
+	
+	vector<vector<int>> cheese(r, vector<int>(c));
+	vector<vector<bool>> air(r, vector<bool>(c,false));
+	
+	int cnt = 0;
+	for(int i=0;i<r;i++){
+		for(int j=0;j<c;j++) {
+			cin >> cheese[i][j];
+			cnt = cheese[i][j] == 1 ? cnt+1 : cnt;
+		}
+	}
+	
+	refresh_air(0, 0, cheese, air);
+	
+	int answer = 0;
+	int prev_remain;
+	
+	while(cnt > 0){
+		prev_remain = cnt;
+		
+		vector<vector<int>> cheese_tmp = cheese;
+		vector<vector<bool>> air_tmp = air;
+		
+		for(int i=0;i<r;i++){
+			for(int j=0;j<c;j++) {
+				if(cheese[i][j] == 1 && check_around_air(i, j, cheese, air)) {
+					cheese_tmp[i][j] = 0;
+					refresh_air(i, j, cheese_tmp, air_tmp);
+					cnt--;
+				}
+			}
+		}
+		
+		cheese = cheese_tmp;
+		air = air_tmp;
+		
+		answer++;
+	}
+	
+	
+	cout << answer << '\n' << prev_remain;
+	
+	return 0;
+}
