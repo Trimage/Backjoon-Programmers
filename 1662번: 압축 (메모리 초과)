@@ -1,27 +1,9 @@
 #include <iostream>
 #include <string>
+#include <stack>
 
 using namespace std;
 
-string dfs(int i, string cur, string& str) {
-	if(i >= str.size() || str[i] == ')') return cur;
-	
-	if(str[i] != '(') {
-		cur.push_back(str[i]);
-		cur = dfs(i+1, cur, str);
-	}
-	else {
-		string tmp = dfs(i+1, "", str);
-		
-		int n = cur.back() - '0';
-
-		cur.pop_back();
-		
-		for(int j=0;j<n;j++) cur+= tmp;
-	}
-	
-	return cur;
-}
 	
 int main() {
     ios::sync_with_stdio(false);
@@ -29,12 +11,20 @@ int main() {
 	
 	string str;
 	cin >>str;
-	
-	string answer = dfs(0, "" , str);
+
+	string answer = "";
+	for(int i = str.size()-1; i>=0; i--){
+		if(str[i] == '(') {
+			int n = str[--i] - '0';
+			
+			string tmp = answer;
+			if(n==0) answer = "";
+			else for(int j=1;j<n;j++) answer += tmp;
+		}
+		else if(str[i] != ')') answer.insert(0, 1, str[i]);
+	}
 	
 	cout << answer.size();
-	
-	
 	
 	return 0;
 }
