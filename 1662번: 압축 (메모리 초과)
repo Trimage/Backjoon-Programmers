@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+string dfs(int i, string cur, string& str) {
+	if(i >= str.size() || str[i] == ')') return cur;
+	
+	if(str[i] != '(') {
+		cur.push_back(str[i]);
+		cur = dfs(i+1, cur, str);
+	}
+	else {
+		string tmp = dfs(i+1, "", str);
+		
+		int n = cur.back() - '0';
+
+		cur.pop_back();
+		
+		for(int j=0;j<n;j++) cur+= tmp;
+	}
+	
+	return cur;
+}
+	
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+	
+	string str;
+	cin >>str;
+	
+	string answer = dfs(0, "" , str);
+	
+	cout << answer.size();
+	
+	
+	
+	return 0;
+}
