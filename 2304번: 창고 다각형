@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+/*
+1. 값을 입력 받을 때 가장 높은 기둥의 위치와 높이를 계산,
+   그리고 시작점과 끝점도 함께 구함(계산을 빠르게 하기 위함)
+2. 1에서 구한 시작점 ~ max_idx까지 중 올라가는 과정에서 현재까지 가장높은 기둥의 높이만큼 더함
+3. max_idx + 1 ~ 1에서 구한 끝점까지 중 올라가는 과정에서 현재까지 가장높은 기둥의 높이만큼 더함
+4. 가장 높은 기둥의 높이를 더함
+
+
+*/
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+		
+	int n;
+	cin >> n;
+	
+	// x좌표별 기둥 높이를 저장
+	vector<int> arr(1001, 0);
+	
+	int start = 1001, end = -1;
+	pair<int,int> max_data = {-1, 0};
+	for(int i=0;i<n;i++) {
+		int x, y;
+		cin >> x >> y;
+		
+		arr[x] = y;
+		
+		max_data = max_data.second < y ? make_pair(x, y) : max_data;
+		
+		start = start > x ? x : start;
+		end = end < x ? x : end;
+	}
+	
+	
+	int answer = max_data.second;
+	int cur_max = 0;
+	for(int i=start;i<max_data.first;i++) {
+		cur_max = arr[i] > cur_max ? arr[i] : cur_max;
+		
+		answer += cur_max;
+	}
+	
+	cur_max = 0;
+	for(int i=end;i>max_data.first;i--) {
+		cur_max = arr[i] > cur_max ? arr[i] : cur_max;
+		
+		answer += cur_max;
+	}
+	
+	cout << answer;
+	
+	return 0;
+}
