@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <string>
+
+using namespace std;
+
+/* 3번만에 통과
+text case
+INPUT : 6(22)122
+OUTPUT : 15
+이 조건을 빼먹었음
+*/
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+	
+	string str;
+	cin >>str;
+	
+	vector<int> arr(1);
+	
+	int cnt = 0;
+	for(int i = str.size()-1; i>=0; i--){
+		if(str[i] == '(') {
+			int n = str[--i] - '0';
+
+			if(n==0) arr[cnt] = 0;
+			else arr[cnt] *= n;
+			
+			arr[cnt-1] += arr[cnt];
+			cnt--;
+			arr.pop_back();
+		}
+		else if(str[i] != ')') arr[cnt]++;
+		else {
+			arr.push_back(0);
+			cnt++;
+		}
+	}
+	
+	int answer =0;
+	for(int num : arr) answer += num;
+	cout << answer;
+		
+	return 0;
+}
