@@ -1,0 +1,90 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#define INF 2501
+
+using namespace std;
+
+int dy[] = { 0, 0, 1, -1 };
+int dx[] = { 1, -1, 0, 0 };
+
+int answer = INF;
+
+void bfs(int empty_cnt, vector<pair<int, int>> virus_idx, vector<vector<int>> arr) {
+	queue<pair<pair<int, int>, int>> q;
+	vector<vector<bool>> visit(arr.size(), vector<bool>(arr[0].size(), false));
+
+	for (int i = 0;i < virus_idx.size();i++) 
+		q.push(make_pair(virus_idx[i], 0));
+
+	while (!q.empty()) {
+		int y = q.front().first.first;
+		int x = q.front().first.second;
+		int cnt = q.front().second;
+		q.pop();
+
+		if (cnt > answer) return;
+
+		for (int i = 0;i < 4;i++) {
+			int ay = y + dy[i];
+			int ax = x + dx[i];
+
+			if (ay >= 0 && ay < arr.size() && ax >= 0 && ax < arr[ay].size()) {
+				if (arr[ay][ax] != 1 && !visit[ay][ax]) {
+					if(arr[ay][ax]==0) empty_cnt--;
+					arr[ay][ax] = 2;
+					visit[ay][ax] = true;
+					
+					q.push(make_pair(make_pair(ay, ax), cnt + 1));
+
+					if (empty_cnt == 0) {
+						answer = answer > cnt + 1 ? cnt + 1 : answer;
+						return;
+					}
+				}
+			}
+		}
+	}
+}
+
+void solve(int m, int k, int empty_cnt, vector<pair<int, int>> sub_vec, vector<pair<int, int>>& virus_idx, vector<vector<int>>& arr) {
+	if (sub_vec.size() == m) {
+		bfs(empty_cnt, sub_vec, arr);
+		return;
+	}
+
+	for (int i = k;i < virus_idx.size();i++) {
+		sub_vec.push_back(virus_idx[i]);
+		solve(m, i + 1, empty_cnt, sub_vec, virus_idx, arr);
+		sub_vec.pop_back();
+	}
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+	int n, m;
+	cin >> n >> m;
+
+	vector<pair<int, int>> virus_idx;
+	vector<vector<int>> arr(n, vector<int>(n));
+	int empty_cnt = 0;
+
+	for (int i = 0;i < n;i++) {
+		for (int j = 0;j < n;j++) {
+			cin >> arr[i][j];
+			if (arr[i][j] == 2) virus_idx.push_back(make_pair(i, j));
+			
+			empty_cnt = arr[i][j] == 0 ? empty_cnt + 1 : empty_cnt;
+		}
+	}
+
+	solve(m, 0, empty_cnt, vector<pair<int, int>>(), virus_idx, arr);
+
+	if (empty_cnt == 0) answer = 0;
+	if (answer == INF) cout << -1;
+	else cout << answer;
+
+	return 0;
+}
