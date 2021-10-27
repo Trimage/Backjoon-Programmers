@@ -1,0 +1,81 @@
+#include <iostream>
+#include <string>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int dy[] = {0, 0, -1 , 1};
+int dx[] = {1, -1 , 0, 0};
+
+class Man{
+public :
+	int y;
+	int x;
+	int cnt;
+	
+	Man(int y, int x, int cnt) {
+		this->y = y;
+		this->x = x;
+		this->cnt = cnt;
+	}
+};
+
+
+struct cmp{
+	bool operator()(Man a, Man b) {
+		return a.cnt > b.cnt;
+	}
+};
+
+
+int solve(int n, vector<string>& arr, vector<vector<bool>>& visit){
+	n--;
+	
+	priority_queue<Man, vector<Man>, cmp> pq;
+	visit[0][0] = true;
+	
+	Man man(0, 0, 0);
+	pq.push(man);
+	
+	while(!pq.empty()) {
+		Man cur = pq.top();
+		pq.pop();
+		
+		if(cur.y == n && cur.x == n)
+			return cur.cnt;
+		
+		for(int i=0;i<4;i++) {
+			Man next(cur.y + dy[i], cur.x + dx[i], cur.cnt);
+			
+			if(next.y < 0 || next.y > n || next.x < 0 || next.x > n || visit[next.y][next.x]) continue;
+			
+			if(arr[next.y][next.x] == '0') next.cnt++;
+			
+			visit[next.y][next.x] = true;
+			pq.push(next);
+		}
+	}
+	
+	return 0;
+}
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+	
+	
+	int n;
+	cin >> n;
+	
+	vector<string> arr(n);
+	vector<vector<bool>> visit(n, vector<bool>(n, false));
+	
+	
+	for(int i=0;i<n;i++) cin >> arr[i];
+	
+	cout << solve(n, arr, visit);
+	
+	return 0;
+}
