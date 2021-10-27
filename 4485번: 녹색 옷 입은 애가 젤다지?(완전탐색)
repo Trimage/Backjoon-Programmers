@@ -1,0 +1,67 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+#define INF 987654321
+using namespace std;
+
+
+int dy[] = {0, 0, -1, 1};
+int dx[] = {1, -1, 0, 0};
+
+void bfs(int n, vector<vector<int>>& arr, vector<vector<int>>& cnt) {
+	n--;
+	
+	queue<pair<int, int>> q;
+	cnt[0][0] = arr[0][0];
+	
+	q.push(make_pair(0, 0));
+	
+	while(!q.empty()){
+		int y = q.front().first;
+		int x = q.front().second;
+		q.pop();
+		
+		for(int i=0; i<4; i++) {
+			int ay = y + dy[i];
+			int ax = x + dx[i];
+			
+			if(ay <0 || ay > n || ax < 0 || ax > n || cnt[y][x] + arr[ay][ax] >= cnt[ay][ax]) continue;
+			
+			cnt[ay][ax] = cnt[y][x] + arr[ay][ax];
+			q.push(make_pair(ay,ax));
+		}
+	}
+	
+}
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+	
+	int n;
+	int num=0;
+	while(1) {
+		cin >> n;
+		
+		if(n==0) break;
+		
+		num++;
+		
+		vector<vector<int>> arr(n, vector<int>(n));
+		vector<vector<int>> cnt(n, vector<int>(n, INF));
+		
+		for(int i=0;i<n;i++){
+			for(int j=0;j<n;j++){
+				cin >> arr[i][j];
+			}
+		}
+		
+		bfs(n, arr, cnt);
+		cout << "Problem " << num << ": " << cnt[n-1][n-1] << '\n';
+	}
+		
+	
+	return 0;
+}
