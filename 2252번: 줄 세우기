@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+/* 위상정렬 문제 */
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+    
+    int n, m;
+    cin >> n >> m;
+    
+    vector<vector<int>> edge(n+1);
+    vector<int> result(n+1, 0);
+    for(int i=0; i<m; i++){
+        int a, b;
+        cin >> a >> b;
+        edge[a].push_back(b);
+        result[b]++;
+    }
+    
+    queue<int> q;
+    for(int i=1;i<=n;i++) {
+        if(result[i] == 0) q.push(i);
+    }
+    
+    while(!q.empty()){
+        int num = q.front();
+        q.pop();
+        
+        cout << num << ' ';
+        
+        for(int i=0;i<edge[num].size();i++) {
+            if(--result[edge[num][i]] == 0)
+                q.push(edge[num][i]);
+        }
+    }
+    
+    return 0;
+}
