@@ -1,0 +1,89 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+double get_distance(int x, int y, int xx, int yy) {
+	double dy = (y - yy) * (y - yy);
+	double dx = (x - xx) * (x - xx);
+	double dist = sqrt(dy + dx);
+	
+	return dist;
+}
+
+
+int find_parent(int a, vector<int>& parent){
+	if(a == parent[a]) return a;
+	return parent[a] = find_parent(parent[a], parent);
+}
+
+void union_parent(int a, int b, vector<int>& parent){
+	a = find_parent(a, parent);
+	b = find_parent(b, parent);
+	
+	parent[b] = a;
+}
+
+bool same_parent(int a, int b, vector<int>& parent){
+	a = find_parent(a, parent);
+	b = find_parent(b, parent);
+	if (a==b) return true;
+	return false;
+}
+
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+	cout << fixed;
+	cout.precision(2);
+	
+	
+	vector<pair<double, double>> arr;
+	vector<pair<double, pair<int, int>>> edge;
+	
+	
+	int n;
+	cin >> n;
+	
+	for(int i=0;i<n;i++) {
+		double a, b;
+		cin >> a >> b;
+		arr.push_back(make_pair(a,b));
+	}
+	
+	for(int i=0;i<n;i++) {
+		double x = arr[i].first;
+		double y = arr[i].second;
+		
+		for(int j=i+1; j<n;j++) {
+			double xx = arr[j].first;
+			double yy = arr[j].second;
+			
+			double val = get_distance(x, y, xx, yy);
+			edge.push_back(make_pair(val, make_pair(i, j)));
+		}
+	}
+	
+	double answer = 0;
+	
+	vector<int> parent(n);
+	for(int i=0;i<n;i++) parent[i] = i;
+	sort(edge.begin(), edge.end());
+	for(int i=0;i<edge.size();i++) {
+		double cost = edge[i].first;
+		int a = edge[i].second.first;
+		int b = edge[i].second.second;
+		
+		if(!same_parent(a, b, parent)) {
+			union_parent(a, b, parent);
+			answer += cost;
+		}
+	}
+	
+	cout << answer;
+	
+	return 0;
+}
