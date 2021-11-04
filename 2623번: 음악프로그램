@@ -1,0 +1,66 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+
+using namespace std;
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+
+	int n, m;
+	cin >> n >> m;
+	
+	vector<vector<int>> edge(n+1);
+	vector<int> degrees(n+1, 0);
+	
+	for(int i=0;i<m;i++) {
+		int singers;
+		cin >> singers;
+		
+		int idx;
+		if(singers !=0)
+			cin >> idx;
+		
+		for(int j=1;j<singers;j++) {
+			int a;
+			cin >> a;
+			edge[idx].push_back(a);
+			degrees[a]++;
+			
+			idx = a;
+		}
+	}
+	
+	queue<int> q;
+	for(int i=1;i<=n;i++) {
+		if(degrees[i]==0) q.push(i);
+	}
+	
+	
+	vector<int> answer(n+1, 0);
+	bool check = true;
+	for(int i=1;i<=n;i++) {
+		if(q.empty()) {
+			check =false;
+			break;
+		}
+		
+		int cur = q.front();
+		q.pop();
+		answer[i] = cur;
+		
+		for(int j=0;j<edge[cur].size();j++) {
+			int next = edge[cur][j];
+			
+			if(--degrees[next] == 0) q.push(next);
+		}
+	}
+	
+	if(check) {
+		for(int i=1;i<answer.size();i++) cout << answer[i] << ' ';
+	}
+	else cout << 0;
+	
+	return 0;
+}
