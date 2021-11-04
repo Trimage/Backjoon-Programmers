@@ -1,0 +1,41 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+/* 투포인트 문제 */
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(NULL);
+		
+	int n;
+	cin >> n;
+	
+	vector<int> arr(n);
+	for(int i=0;i<n;i++)
+		cin >> arr[i];
+	
+	int target;
+	cin >> target;
+	
+	sort(arr.begin(), arr.end());
+	
+	int start = 0, end = n - 1, cnt = 0;
+	
+	while(start < end) {
+		int sum = arr[start] + arr[end];
+		if(sum == target) {
+			cnt++;
+			start++;
+			end--;
+		}
+		else if(sum < target) start++;
+		else end--;
+	}
+	
+	cout << cnt;
+	
+	return 0;
+}
