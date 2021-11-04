@@ -1,0 +1,71 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <algorithm>
+
+using namespace std;
+
+
+void solve() {
+	int n, k;
+	cin >> n >> k;
+	
+	vector<int> arr(n+1);
+    vector<vector<int>> edge(n+1);
+    vector<int> degrees(n+1,0);
+	
+	for(int i=1;i<=n;i++) 
+        cin >> arr[i];
+	
+	for(int i=0;i<k;i++) {
+        int a, b;
+		cin >> a >> b;
+		
+		edge[a].push_back(b);
+        degrees[b]++;
+    }
+	
+	int target;
+	cin >> target;
+	
+	
+    queue<int> q;
+    vector<int> answer(n+1, 0);
+    for(int i=1;i<=n;i++) {
+        if(degrees[i] == 0) {
+            q.push(i);
+            answer[i] = 0;
+        }
+    }
+	
+    while(!q.empty()) {
+        int num = q.front();
+        q.pop();
+        
+        answer[num] += arr[num];
+        
+		if(num == target) {
+			cout << answer[num]<<'\n';
+			break;
+		}
+		
+        for(int i=0;i<edge[num].size();i++){
+            int tmp = edge[num][i];
+            answer[tmp] = answer[tmp] < answer[num] ? answer[num] : answer[tmp];
+            if(--degrees[tmp] == 0) q.push(tmp);
+        }
+    }
+	
+}
+int main() {
+	ios::sync_with_stdio(false);
+    cin.tie(NULL);
+		
+    int test_case;
+    cin >> test_case;
+
+	while(test_case--)
+		solve();
+    
+    return 0;
+}
